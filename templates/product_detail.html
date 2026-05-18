@@ -47,13 +47,21 @@
             <span class="badge bg-warning text-dark">Скидка</span>
           {% endif %}
         </div>
-        <div class="mt-2">
-          {% if product.stock > 0 %}
-            <span class="badge bg-success"><i class="bi bi-check-circle"></i> В наличии: {{ product.stock }} шт.</span>
+        <div class="mb-3">
+          {% if product.stock > 10 %}
+            <span class="badge bg-success px-3 py-2 rounded-pill">
+              <i class="bi bi-check-circle me-1"></i> В наличии: {{ product.stock }} шт.
+            </span>
+          {% elif product.stock > 0 %}
+            <span class="badge bg-warning text-dark px-3 py-2 rounded-pill">
+              <i class="bi bi-exclamation-triangle me-1"></i> Осталось мало: {{ product.stock }} шт.
+            </span>
           {% else %}
-            <span class="badge bg-danger"><i class="bi bi-x-circle"></i> Нет в наличии</span>
+            <span class="badge bg-secondary px-3 py-2 rounded-pill">
+              <i class="bi bi-x-circle me-1"></i> Нет в наличии
+            </span>
           {% endif %}
-        </div>
+        </div>>
       </div>
 
       <div class="mb-4">
