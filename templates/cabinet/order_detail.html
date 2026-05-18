@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}Заказ №{{ order.id }}{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <h1 class="h2 mb-4">Заказ №{{ order.id }}</h1>
+    <p><strong>Дата:</strong> {{ order.created_at|date:"d.m.Y H:i" }}</p>
+    <p><strong>Статус:</strong> {{ order.get_status_display }}</p>
+    <p><strong>Адрес доставки:</strong> {{ order.address }}</p>
+    <p><strong>Телефон:</strong> {{ order.phone }}</p>
+    <p><strong>Email:</strong> {{ order.email }}</p>
+    <p><strong>Комментарий:</strong> {{ order.comment|default:"—" }}</p>
+    <h3 class="h5 mt-4">Состав заказа</h3>
+    <div class="table-responsive">
+        <table class="table table-sm">
+            <thead>
+                <tr><th>Товар</th><th>Артикул</th><th>Цена</th><th>Кол-во</th><th>Сумма</th></tr>
+            </thead>
+            <tbody>
+                {% for item in items %}
+                <tr>
+                    <td>{{ item.name }}</td>
+                    <td>{{ item.sku }}</td>
+                    <td>{{ item.price }} Br</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>{{ item.total }} Br</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr><th colspan="4" class="text-end">Итого:</th><th>{{ order.total_price }} Br</th></tr>
+            </tfoot>
+        </table>
+    </div>
+    <a href="{% url 'order_history' %}" class="btn btn-secondary">← Назад к заказам</a>
+</div>
+{% endblock %}

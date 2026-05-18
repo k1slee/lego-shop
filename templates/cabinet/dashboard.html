@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block title %}Личный кабинет{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <h1 class="h2 mb-4">Личный кабинет</h1>
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-header">Профиль</div>
+                <div class="card-body">
+                    <p><strong>Имя:</strong> {{ user.first_name|default:"Не указано" }}</p>
+                    <p><strong>Email:</strong> {{ user.email }}</p>
+                    <p><strong>Телефон:</strong> {{ profile.phone|default:"Не указан" }}</p>
+                    <p><strong>Адрес:</strong> {{ profile.address|default:"Не указан"|linebreaksbr }}</p>
+                    <a href="{% url 'profile_edit' %}" class="btn btn-primary">Редактировать</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">Последние заказы</div>
+                <div class="card-body">
+                    {% if orders %}
+                        <div class="table-responsive">
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr><th>№</th><th>Дата</th><th>Сумма</th><th>Статус</th><th></th></tr>
+                                </thead>
+                                <tbody>
+                                    {% for order in orders|slice:":5" %}
+                                    <tr>
+                                        <td>{{ order.id }}</td>
+                                        <td>{{ order.created_at|date:"d.m.Y" }}</td>
+                                        <td>{{ order.total_price }} Br</td>
+                                        <td>{{ order.get_status_display }}</td>
+                                        <td><a href="{% url 'order_detail' order.id %}">Детали</a></td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <a href="{% url 'order_history' %}" class="btn btn-outline-secondary btn-sm">Все заказы →</a>
+                    {% else %}
+                        <p>У вас ещё нет заказов.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

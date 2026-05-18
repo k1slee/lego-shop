@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}Редактирование профиля{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <h1 class="h2 mb-4">Редактирование профиля</h1>
+    <div class="row">
+        <div class="col-md-6">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="card mb-3">
+                    <div class="card-header">Основные данные</div>
+                    <div class="card-body">
+                        {{ user_form.as_p }}
+                    </div>
+                </div>
+                <div class="card mb-3">
+                    <div class="card-header">Контактная информация</div>
+                    <div class="card-body">
+                        {{ profile_form.as_p }}
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Сохранить</button>
+                <a href="{% url 'profile_dashboard' %}" class="btn btn-secondary">Отмена</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

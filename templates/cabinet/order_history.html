@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}История заказов{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <h1 class="h2 mb-4">История заказов</h1>
+    {% if orders %}
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr><th>№</th><th>Дата</th><th>Сумма</th><th>Статус</th><th></th></tr>
+                </thead>
+                <tbody>
+                    {% for order in orders %}
+                    <tr>
+                        <td>{{ order.id }}</td>
+                        <td>{{ order.created_at|date:"d.m.Y H:i" }}</td>
+                        <td>{{ order.total_price }} Br</td>
+                        <td>{{ order.get_status_display }}</td>
+                        <td><a href="{% url 'order_detail' order.id %}" class="btn btn-sm btn-outline-primary">Детали</a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p>У вас пока нет заказов.</p>
+    {% endif %}
+</div>
+{% endblock %}

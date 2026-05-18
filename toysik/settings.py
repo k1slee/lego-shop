@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'shop',
+    'shop', 
 ]
 
 MIDDLEWARE = [
@@ -49,7 +49,9 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'catalog'
+LOGOUT_REDIRECT_URL = 'catalog'
 ROOT_URLCONF = 'toysik.urls'
 
 TEMPLATES = [
@@ -72,7 +74,17 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'toysik.wsgi.application'
 
-
+TELEGRAM_BOT_TOKEN = '8509720392:AAGIfyNSBGRKd4XzdDCqUYj1lCmcegeH-9U'
+TELEGRAM_CHAT_ID = '773364781'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.yandex.ru'
+EMAIL_PORT = 465
+EMAIL_HOST_USER = 'trofimchuknicita@yandex.ru'
+EMAIL_HOST_PASSWORD = 'hejqnjbmutrsrsnv'
+EMAIL_USE_SSL = True
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+SERVER_EMAIL = EMAIL_HOST_USER
+EMAIL_ADMIN = EMAIL_HOST_USER
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 

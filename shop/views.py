@@ -3,12 +3,16 @@ from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.db.models import Q
-from django.http import Http404
+from django.http import Http404, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
-
+from django.template.loader import render_to_string
+from django.conf import settings
+import requests
+from .forms import ProfileForm, UserEditForm
+from .models import Profile
 from .cart import Cart
-from .forms import AddToCartForm, RegisterForm, UpdateCartForm
-from .models import Category, Product
+from .forms import AddToCartForm, RegisterForm, UpdateCartForm, OrderForm
+from .models import Category, Product, Order, OrderItem
 
 
 def home(request):
@@ -38,8 +42,7 @@ def product_list(request):
     
     series = request.GET.get('series')
     if series:
-        products = products.filter(series =series)
-
+        products = products.filter(series=series)
 
     q = (request.GET.get('q') or '').strip()
     if q:
@@ -96,12 +99,9 @@ def cart_detail(request):
     cart = Cart(request)
     lines = list(cart.lines())
     
-    # Рекомендуемые товары: из категорий товаров в корзине (до 4 штук)
     recommended_products = []
     if lines:
-        # Получаем ID категорий товаров в корзине
         category_ids = set(line.product.category_id for line in lines)
-        # Ищем активные товары из этих категорий, исключая уже добавленные
         cart_product_ids = [line.product.id for line in lines]
         recommended_products = Product.objects.filter(
             is_active=True,
@@ -109,7 +109,6 @@ def cart_detail(request):
         ).exclude(id__in=cart_product_ids).distinct()[:4]
     
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-        # AJAX-запрос – возвращаем фрагмент таблицы (если нужно)
         html = render_to_string('cart/cart_table.html', {'lines': lines, 'cart_total': cart.total_price()}, request=request)
         return JsonResponse({
             'cart_html': html,
@@ -123,15 +122,17 @@ def cart_detail(request):
         'recommended_products': recommended_products,
     })
 
+
 def feedback(request):
     if request.method == 'POST':
         name = request.POST.get('name', '')
         email = request.POST.get('email', '')
         message = request.POST.get('message', '')
-        # Здесь можно отправить письмо, но для демо просто покажем сообщение
         messages.success(request, 'Спасибо! Ваше сообщение отправлено.')
         return redirect('home')
     return redirect('home')
+
+
 def cart_add(request, product_id: int):
     if request.method != 'POST':
         raise Http404
@@ -194,11 +195,6 @@ def cart_clear(request):
     return redirect('cart_detail')
 
 
-@login_required
-def checkout_stub(request):
-    return render(request, 'checkout.html')
-
-
 def register(request):
     if request.user.is_authenticated:
         return redirect('catalog')
@@ -215,3 +211,144 @@ def register(request):
         form = RegisterForm()
 
     return render(request, 'registration/register.html', {'form': form})
+
+
+def order_success(request, order_id):
+    order = get_object_or_404(Order, id=order_id)
+    return render(request, 'order_success.html', {'order': order})
+
+
+@login_required
+def checkout(request):
+    cart = Cart(request)
+    lines = list(cart.lines())
+    
+    if not lines:
+        messages.error(request, 'Ваша корзина пуста. Добавьте товары перед оформлением заказа.')
+        return redirect('cart_detail')
+    
+    if request.method == 'POST':
+        form = OrderForm(request.POST)
+        if form.is_valid():
+            order = form.save(commit=False)
+            order.user = request.user
+            order.total_price = cart.total_price()
+            order.save()
+            
+            # Сохраняем позиции заказа
+            for line in lines:
+                OrderItem.objects.create(
+                    order=order,
+                    product=line.product,
+                    name=line.product.name,       # поле называется name
+                    sku=line.product.sku,         # поле называется sku
+                    price=line.unit_price,
+                    quantity=line.quantity,
+                    total=line.total_price
+                )
+            
+            # Отправляем уведомление в Telegram
+            send_telegram_notification(order, lines)
+            
+            # Очищаем корзину
+            cart.clear()
+            
+            messages.success(request, f'Заказ №{order.id} успешно оформлен! Мы свяжемся с вами.')
+            return redirect('order_success', order_id=order.id)
+        else:
+            messages.error(request, 'Исправьте ошибки в форме.')
+    else:
+        initial = {}
+        if request.user.is_authenticated:
+            initial['first_name'] = request.user.first_name
+            initial['last_name'] = request.user.last_name
+            initial['email'] = request.user.email
+
+            if hasattr(request.user, 'profile'):
+                profile = request.user.profile
+                if profile.phone:
+                    initial['phone'] = profile.phone
+                if profile.address:
+                    initial['address'] = profile.address
+        form = OrderForm(initial=initial)
+    
+    return render(request, 'checkout.html', {
+        'form': form,
+        'lines': lines,
+        'cart_total': cart.total_price(),
+    })
+
+
+def send_telegram_notification(order, lines):
+    bot_token = getattr(settings, 'TELEGRAM_BOT_TOKEN', '')
+    chat_id = getattr(settings, 'TELEGRAM_CHAT_ID', '')
+    if not bot_token or not chat_id:
+        return
+    
+    items_text = "\n".join([
+        f"• {line.product.name} (арт. {line.product.sku}) x {line.quantity} = {line.total_price} Br"
+        for line in lines
+    ])
+    text = f"""
+🆕 <b>Новый заказ #{order.id}</b>
+
+👤 <b>Клиент:</b> {order.first_name} {order.last_name}
+📞 <b>Телефон:</b> {order.phone}
+📧 <b>Email:</b> {order.email}
+🏠 <b>Адрес:</b> {order.address}
+💬 <b>Комментарий:</b> {order.comment or '—'}
+
+📦 <b>Состав заказа:</b>
+{items_text}
+
+💰 <b>Итого:</b> {order.total_price} Br
+"""
+    url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
+    try:
+        requests.post(url, data={'chat_id': chat_id, 'text': text, 'parse_mode': 'HTML'}, timeout=5)
+    except Exception:
+        pass
+
+@login_required
+def profile_dashboard(request):
+    user = request.user
+    profile = user.profile
+    orders = Order.objects.filter(user=user).order_by('-created_at')
+    return render(request, 'cabinet/dashboard.html', {
+        'user': user,
+        'profile': profile,
+        'orders': orders,
+    })
+
+@login_required
+def profile_edit(request):
+    user = request.user
+    profile = user.profile
+    if request.method == 'POST':
+        user_form = UserEditForm(request.POST, instance=user)
+        profile_form = ProfileForm(request.POST, request.FILES, instance=profile)
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+            messages.success(request, 'Данные профиля обновлены')
+            return redirect('profile_dashboard')
+        else:
+            messages.error(request, 'Исправьте ошибки в форме')
+    else:
+        user_form = UserEditForm(instance=user)
+        profile_form = ProfileForm(instance=profile)
+    return render(request, 'cabinet/edit_profile.html', {
+        'user_form': user_form,
+        'profile_form': profile_form,
+    })
+
+@login_required
+def order_history(request):
+    orders = Order.objects.filter(user=request.user).order_by('-created_at')
+    return render(request, 'cabinet/order_history.html', {'orders': orders})
+
+@login_required
+def order_detail(request, order_id):
+    order = get_object_or_404(Order, id=order_id, user=request.user)
+    items = order.items.all()
+    return render(request, 'cabinet/order_detail.html', {'order': order, 'items': items})

@@ -1,7 +1,9 @@
 from django.db import models
 from django.urls import reverse
 from django.utils.text import slugify
-
+from django.contrib.auth.models import User
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 def _generate_unique_slug(model_cls, base: str, *, instance_pk=None) -> str:
     base_slug = slugify(base) or 'item'
@@ -85,3 +87,72 @@ class Product(models.Model):
 
     def get_absolute_url(self):
         return reverse('product_detail', kwargs={'slug': self.slug})
+
+class Order(models.Model):
+    STATUS_CHOICES = [
+        ('new', 'Новый'),
+        ('processing', 'В обработке'),
+        ('completed', 'Выполнен'),
+        ('cancelled', 'Отменён'),
+    ]
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='Пользователь')
+    first_name = models.CharField(max_length=100, verbose_name='Имя')
+    last_name = models.CharField(max_length=100, verbose_name='Фамилия', blank=True)
+    phone = models.CharField(max_length=20, verbose_name='Телефон')
+    email = models.EmailField(verbose_name='Email')
+    address = models.TextField(verbose_name='Адрес доставки')
+    comment = models.TextField(verbose_name='Комментарий к заказу', blank=True)
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
+    updated_at = models.DateTimeField(auto_now=True, verbose_name='Дата обновления')
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='new', verbose_name='Статус')
+    total_price = models.DecimalField(max_digits=12, decimal_places=2, verbose_name='Итого')
+
+    class Meta:
+        verbose_name = 'Заказ'
+        verbose_name_plural = 'Заказы'
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f'Заказ #{self.id} от {self.created_at.strftime("%d.%m.%Y")}'
+
+
+class OrderItem(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='items', verbose_name='Заказ')
+    product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True, verbose_name='Товар')
+    name = models.CharField(max_length=255, verbose_name='Название товара')  # копия на момент заказа
+    sku = models.CharField(max_length=64, verbose_name='Артикул')
+    price = models.DecimalField(max_digits=12, decimal_places=2, verbose_name='Цена')
+    quantity = models.PositiveIntegerField(default=1, verbose_name='Количество')
+    total = models.DecimalField(max_digits=12, decimal_places=2, verbose_name='Сумма')
+
+    def save(self, *args, **kwargs):
+        self.total = self.price * self.quantity
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f'{self.name} x {self.quantity}'
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name='Пользователь')
+    phone = models.CharField('Телефон', max_length=20, blank=True)
+    address = models.TextField('Адрес доставки', blank=True)
+    avatar = models.ImageField('Аватар', upload_to='avatars/', blank=True, null=True)
+    created_at = models.DateTimeField('Дата создания', auto_now_add=True)
+    updated_at = models.DateTimeField('Дата обновления', auto_now=True)
+
+    class Meta:
+        verbose_name = 'Профиль'
+        verbose_name_plural = 'Профили'
+
+    def __str__(self):
+        return f'Профиль {self.user.username}'
+
+
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
+
+@receiver(post_save, sender=User)
+def save_user_profile(sender, instance, **kwargs):
+    instance.profile.save()
