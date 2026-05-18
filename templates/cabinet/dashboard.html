@@ -1,53 +1,96 @@
 {% extends 'base.html' %}
+{% load static %}
 
-{% block title %}Личный кабинет{% endblock %}
+{% block title %}Личный кабинет — ToySik LEGO{% endblock %}
 
 {% block content %}
 <div class="container py-4">
-    <h1 class="h2 mb-4">Личный кабинет</h1>
-    <div class="row">
-        <div class="col-md-4 mb-4">
-            <div class="card">
-                <div class="card-header">Профиль</div>
-                <div class="card-body">
-                    <p><strong>Имя:</strong> {{ user.first_name|default:"Не указано" }}</p>
-                    <p><strong>Email:</strong> {{ user.email }}</p>
-                    <p><strong>Телефон:</strong> {{ profile.phone|default:"Не указан" }}</p>
-                    <p><strong>Адрес:</strong> {{ profile.address|default:"Не указан"|linebreaksbr }}</p>
-                    <a href="{% url 'profile_edit' %}" class="btn btn-primary">Редактировать</a>
-                </div>
-            </div>
+  <div class="row g-4">
+    <!-- Левая колонка: профиль -->
+    <div class="col-md-4">
+      <div class="card border-0 shadow-sm rounded-4">
+        <div class="card-header bg-white border-0 pt-4">
+          <h4 class="mb-0"><i class="bi bi-person-circle me-2"></i> Профиль</h4>
         </div>
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">Последние заказы</div>
-                <div class="card-body">
-                    {% if orders %}
-                        <div class="table-responsive">
-                            <table class="table table-sm">
-                                <thead>
-                                    <tr><th>№</th><th>Дата</th><th>Сумма</th><th>Статус</th><th></th></tr>
-                                </thead>
-                                <tbody>
-                                    {% for order in orders|slice:":5" %}
-                                    <tr>
-                                        <td>{{ order.id }}</td>
-                                        <td>{{ order.created_at|date:"d.m.Y" }}</td>
-                                        <td>{{ order.total_price }} Br</td>
-                                        <td>{{ order.get_status_display }}</td>
-                                        <td><a href="{% url 'order_detail' order.id %}">Детали</a></td>
-                                    </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                        <a href="{% url 'order_history' %}" class="btn btn-outline-secondary btn-sm">Все заказы →</a>
-                    {% else %}
-                        <p>У вас ещё нет заказов.</p>
-                    {% endif %}
-                </div>
-            </div>
+        <div class="card-body">
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+              <span><i class="bi bi-person me-2"></i> Имя</span>
+              <span class="text-muted">{{ user.first_name|default:"не указано" }}</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+              <span><i class="bi bi-person me-2"></i> Фамилия</span>
+              <span class="text-muted">{{ user.last_name|default:"не указана" }}</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+              <span><i class="bi bi-envelope me-2"></i> Email</span>
+              <span class="text-muted">{{ user.email }}</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+              <span><i class="bi bi-phone me-2"></i> Телефон</span>
+              <span class="text-muted">{{ profile.phone|default:"не указан" }}</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+              <span><i class="bi bi-geo-alt me-2"></i> Адрес</span>
+              <span class="text-muted">{{ profile.address|default:"не указан"|truncatechars:40 }}</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+              <span><i class="bi bi-calendar-date me-2"></i> Зарегистрирован</span>
+              <span class="text-muted">{{ user.date_joined|date:"d.m.Y" }}</span>
+            </li>
+          </ul>
+          <div class="d-grid mt-3">
+            <a href="{% url 'profile_edit' %}" class="btn btn-outline-primary rounded-pill">
+              <i class="bi bi-pencil-square me-1"></i> Редактировать профиль
+            </a>
+          </div>
         </div>
+      </div>
     </div>
+
+    <!-- Правая колонка: заказы -->
+    <div class="col-md-8">
+      <div class="card border-0 shadow-sm rounded-4">
+        <div class="card-header bg-white border-0 pt-3">
+          <h5 class="mb-0"><i class="bi bi-clock-history me-2"></i> История заказов</h5>
+        </div>
+        <div class="card-body p-0">
+          {% if orders %}
+            <div class="list-group list-group-flush">
+              {% for order in orders %}
+                <div class="list-group-item d-flex flex-wrap align-items-center justify-content-between">
+                  <div>
+                    <strong class="d-block">Заказ №{{ order.id }}</strong>
+                    <small class="text-muted">{{ order.created_at|date:"d.m.Y H:i" }}</small>
+                  </div>
+                  <div>
+                    <span class="fw-semibold">{{ order.total_price }} Br</span>
+                    <span class="badge 
+                      {% if order.status == 'new' %}bg-primary
+                      {% elif order.status == 'processing' %}bg-warning text-dark
+                      {% elif order.status == 'completed' %}bg-success
+                      {% else %}bg-secondary{% endif %} ms-2">
+                      {{ order.get_status_display }}
+                    </span>
+                  </div>
+                  <div>
+                    <a href="{% url 'order_detail' order.id %}" class="btn btn-sm btn-outline-primary rounded-pill">
+                      <i class="bi bi-eye"></i> Детали
+                    </a>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          {% else %}
+            <div class="text-center py-4">
+              <i class="bi bi-inbox fs-1 text-muted"></i>
+              <p class="mt-2 mb-0">У вас пока нет заказов.</p>
+              <a href="{% url 'catalog' %}" class="btn btn-primary mt-3 rounded-pill">Перейти в каталог</a>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 {% endblock %}

@@ -4,27 +4,48 @@
 
 {% block content %}
 <div class="container py-4">
-    <h1 class="h2 mb-4">Редактирование профиля</h1>
-    <div class="row">
-        <div class="col-md-6">
-            <form method="post" enctype="multipart/form-data">
-                {% csrf_token %}
-                <div class="card mb-3">
-                    <div class="card-header">Основные данные</div>
-                    <div class="card-body">
-                        {{ user_form.as_p }}
-                    </div>
-                </div>
-                <div class="card mb-3">
-                    <div class="card-header">Контактная информация</div>
-                    <div class="card-body">
-                        {{ profile_form.as_p }}
-                    </div>
-                </div>
-                <button type="submit" class="btn btn-primary">Сохранить</button>
-                <a href="{% url 'profile_dashboard' %}" class="btn btn-secondary">Отмена</a>
-            </form>
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card border-0 shadow-sm rounded-4">
+        <div class="card-header bg-white border-0 pt-4">
+          <h4 class="mb-0"><i class="bi bi-pencil-square me-2"></i> Редактирование профиля</h4>
         </div>
+        <div class="card-body">
+          <form method="post">
+            {% csrf_token %}
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">Имя</label>
+                {{ user_form.first_name }}
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">Фамилия</label>
+                {{ user_form.last_name }}
+              </div>
+              <div class="col-12">
+                <label class="form-label fw-semibold">Email</label>
+                {{ user_form.email }}
+              </div>
+              <div class="col-12">
+                <label class="form-label fw-semibold">Телефон</label>
+                {{ profile_form.phone }}
+              </div>
+              <div class="col-12">
+                <label class="form-label fw-semibold">Адрес доставки</label>
+                {{ profile_form.address }}
+              </div>
+              <div class="col-12">
+                <hr>
+                <button type="submit" class="btn btn-primary rounded-pill px-4">
+                  <i class="bi bi-check-lg me-1"></i> Сохранить
+                </button>
+                <a href="{% url 'profile_dashboard' %}" class="btn btn-outline-secondary rounded-pill px-4">Отмена</a>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
+  </div>
 </div>
 {% endblock %}

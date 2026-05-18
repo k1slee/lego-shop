@@ -312,7 +312,7 @@ def send_telegram_notification(order, lines):
 @login_required
 def profile_dashboard(request):
     user = request.user
-    profile = user.profile
+    profile, created = Profile.objects.get_or_create(user=user)
     orders = Order.objects.filter(user=user).order_by('-created_at')
     return render(request, 'cabinet/dashboard.html', {
         'user': user,

@@ -1,38 +1,114 @@
 {% extends 'base.html' %}
+{% load static %}
 
-{% block title %}Заказ №{{ order.id }}{% endblock %}
+{% block title %}Заказ №{{ order.id }} — ToySik LEGO{% endblock %}
 
 {% block content %}
 <div class="container py-4">
-    <h1 class="h2 mb-4">Заказ №{{ order.id }}</h1>
-    <p><strong>Дата:</strong> {{ order.created_at|date:"d.m.Y H:i" }}</p>
-    <p><strong>Статус:</strong> {{ order.get_status_display }}</p>
-    <p><strong>Адрес доставки:</strong> {{ order.address }}</p>
-    <p><strong>Телефон:</strong> {{ order.phone }}</p>
-    <p><strong>Email:</strong> {{ order.email }}</p>
-    <p><strong>Комментарий:</strong> {{ order.comment|default:"—" }}</p>
-    <h3 class="h5 mt-4">Состав заказа</h3>
-    <div class="table-responsive">
-        <table class="table table-sm">
-            <thead>
-                <tr><th>Товар</th><th>Артикул</th><th>Цена</th><th>Кол-во</th><th>Сумма</th></tr>
-            </thead>
-            <tbody>
-                {% for item in items %}
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <!-- Заголовок и кнопка назад -->
+      <div class="d-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0">Заказ №{{ order.id }}</h1>
+        <a href="{% url 'order_history' %}" class="btn btn-outline-secondary rounded-pill">
+          <i class="bi bi-arrow-left me-1"></i> Назад к заказам
+        </a>
+      </div>
+
+      <!-- Карточка с общей информацией -->
+      <div class="card border-0 shadow-sm rounded-4 mb-4">
+        <div class="card-header bg-white border-0 pt-4">
+          <h5 class="mb-0"><i class="bi bi-info-circle me-2"></i> Информация о заказе</h5>
+        </div>
+        <div class="card-body">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <p class="mb-1"><strong class="text-muted">Дата заказа:</strong></p>
+              <p>{{ order.created_at|date:"d.m.Y H:i" }}</p>
+            </div>
+            <div class="col-md-6">
+              <p class="mb-1"><strong class="text-muted">Статус:</strong></p>
+              <p>
+                <span class="badge 
+                  {% if order.status == 'new' %}bg-primary
+                  {% elif order.status == 'processing' %}bg-warning text-dark
+                  {% elif order.status == 'completed' %}bg-success
+                  {% else %}bg-secondary{% endif %} px-3 py-2">
+                  {{ order.get_status_display }}
+                </span>
+              </p>
+            </div>
+            <div class="col-md-6">
+              <p class="mb-1"><strong class="text-muted">Телефон:</strong></p>
+              <p>{{ order.phone }}</p>
+            </div>
+            <div class="col-md-6">
+              <p class="mb-1"><strong class="text-muted">Email:</strong></p>
+              <p>{{ order.email }}</p>
+            </div>
+            <div class="col-12">
+              <p class="mb-1"><strong class="text-muted">Адрес доставки:</strong></p>
+              <p>{{ order.address|linebreaksbr }}</p>
+            </div>
+            {% if order.comment %}
+              <div class="col-12">
+                <p class="mb-1"><strong class="text-muted">Комментарий к заказу:</strong></p>
+                <p class="text-muted">{{ order.comment|linebreaksbr }}</p>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      <!-- Таблица товаров -->
+      <div class="card border-0 shadow-sm rounded-4">
+        <div class="card-header bg-white border-0 pt-4">
+          <h5 class="mb-0"><i class="bi bi-box-seam me-2"></i> Состав заказа</h5>
+        </div>
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="table align-middle mb-0">
+              <thead class="table-light">
                 <tr>
-                    <td>{{ item.name }}</td>
-                    <td>{{ item.sku }}</td>
-                    <td>{{ item.price }} Br</td>
-                    <td>{{ item.quantity }}</td>
-                    <td>{{ item.total }} Br</td>
+                  <th>Товар</th>
+                  <th class="text-end">Цена</th>
+                  <th class="text-end">Кол-во</th>
+                  <th class="text-end">Сумма</th>
                 </tr>
+              </thead>
+              <tbody>
+                {% for item in items %}
+                  <tr>
+                    <td>
+                      <div>
+                        <strong>{{ item.name }}</strong>
+                        <div class="text-muted small">Артикул: {{ item.sku }}</div>
+                      </div>
+                    </td>
+                    <td class="text-end">{{ item.price }} Br</td>
+                    <td class="text-end">{{ item.quantity }}</td>
+                    <td class="text-end fw-semibold">{{ item.total }} Br</td>
+                  </tr>
                 {% endfor %}
-            </tbody>
-            <tfoot>
-                <tr><th colspan="4" class="text-end">Итого:</th><th>{{ order.total_price }} Br</th></tr>
-            </tfoot>
-        </table>
+              </tbody>
+              <tfoot class="table-light">
+                <tr>
+                  <th colspan="3" class="text-end">Итого:</th>
+                  <th class="text-end">{{ order.total_price }} Br</th>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Дополнительные действия (например, повтор заказа – опционально) -->
+      <div class="mt-4 text-center">
+        <a href="{% url 'catalog' %}" class="btn btn-primary rounded-pill px-4">
+          <i class="bi bi-shop me-1"></i> Вернуться в каталог
+        </a>
+      </div>
     </div>
-    <a href="{% url 'order_history' %}" class="btn btn-secondary">← Назад к заказам</a>
+  </div>
 </div>
 {% endblock %}
