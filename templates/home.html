@@ -4,7 +4,7 @@
 {% block title %}ToySik LEGO — Главная{% endblock %}
 
 {% block content %}
-  <!-- Hero-секция (оставляем) -->
+  <!-- Hero-секция -->
   <section class="hero rounded-4 p-4 p-md-5 mb-5 text-white">
     <div class="row align-items-center g-4">
       <div class="col-lg-7">
@@ -87,9 +87,9 @@
           <div class="card-body p-4">
             <h3 class="h5 mb-3">Контакты</h3>
             <ul class="list-unstyled">
-              <li class="mb-3"><i class="bi bi-geo-alt-fill text-danger me-2"></i> <strong>Адрес:</strong> г. Москва, ул. Легостройная, д. 8, ТЦ «Кубик»</li>
-              <li class="mb-3"><i class="bi bi-telephone-fill text-primary me-2"></i> <strong>Телефон:</strong> <a href="tel:+74951234567">+7 (495) 123-45-67</a></li>
-              <li class="mb-3"><i class="bi bi-envelope-fill text-secondary me-2"></i> <strong>Email:</strong> <a href="mailto:info@toysik.ru">info@toysik.ru</a></li>
+              <li class="mb-3"><i class="bi bi-geo-alt-fill text-danger me-2"></i> <strong>Адрес:</strong> г. Минск, ул. Червякова, 62</li>
+              <li class="mb-3"><i class="bi bi-telephone-fill text-primary me-2"></i> <strong>Телефон:</strong> <a href="tel:+375291234567">+375 (29) 123-45-67</a></li>
+              <li class="mb-3"><i class="bi bi-envelope-fill text-secondary me-2"></i> <strong>Email:</strong> <a href="mailto:info@toysik.by">info@toysik.by</a></li>
               <li class="mb-3"><i class="bi bi-clock-fill text-info me-2"></i> <strong>Режим работы:</strong><br>
                 Пн–Пт: 10:00 – 20:00<br>
                 Сб–Вс: 11:00 – 18:00
@@ -97,50 +97,33 @@
             </ul>
             <div class="mt-3">
               <strong>Мы в соцсетях:</strong><br>
-              <a href="#" class="btn btn-outline-primary btn-sm mt-2 me-1"><i class="bi bi-vk"></i> VK</a>
-              <a href="#" class="btn btn-outline-info btn-sm mt-2"><i class="bi bi-telegram"></i> Telegram</a>
+              <a href="https://instagram.com/toysik_lego" target="_blank" class="btn btn-outline-danger btn-sm mt-2 me-1"><i class="bi bi-instagram"></i> Instagram</a>
+              <a href="https://tiktok.com/@toysik_lego" target="_blank" class="btn btn-outline-dark btn-sm mt-2"><i class="bi bi-tiktok"></i> TikTok</a>
             </div>
           </div>
         </div>
       </div>
       <div class="col-lg-7">
         <div class="card border-0 shadow-sm overflow-hidden">
-          <div id="map" style="height: 400px; width: 100%;"></div>
+          <iframe 
+            width="100%" 
+            height="400" 
+            frameborder="0" 
+            scrolling="no" 
+            marginheight="0" 
+            marginwidth="0" 
+            src="https://www.openstreetmap.org/export/embed.html?bbox=27.565,53.885,27.595,53.905&layer=mapnik&marker=53.895,27.58" 
+            style="border:0;">
+          </iframe>
           <div class="card-footer bg-white small text-muted">
-            <i class="bi bi-pin-map"></i> м. «Лего-Парк», выход №3, далее 300 метров пешком.
+            <i class="bi bi-pin-map"></i> Остановка «Червякова», рядом ТЦ «Кубик».
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ========== ФОРМА ОБРАТНОЙ СВЯЗИ (опционально) ========== -->
-  <section class="mb-5 bg-light rounded-4 p-4">
-    <div class="row justify-content-center">
-      <div class="col-md-8 text-center">
-        <h2 class="h4 mb-3">Остались вопросы?</h2>
-        <p class="mb-4">Напишите нам, и мы ответим в течение рабочего дня.</p>
-        <form method="post" action="{% url 'feedback' %}" class="row g-3">
-          {% csrf_token %}
-          <div class="col-sm-6">
-            <input type="text" class="form-control" name="name" placeholder="Ваше имя" required>
-          </div>
-          <div class="col-sm-6">
-            <input type="email" class="form-control" name="email" placeholder="Email" required>
-          </div>
-          <div class="col-12">
-            <textarea class="form-control" name="message" rows="3" placeholder="Сообщение" required></textarea>
-          </div>
-          <div class="col-12">
-            <button type="submit" class="btn btn-primary px-4">Отправить</button>
-          </div>
-        </form>
-        <p class="text-muted small mt-3">Мы не передаём ваши данные третьим лицам.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- ========== НОВИНКИ (оставляем как есть) ========== -->
+  <!-- ========== НОВИНКИ ========== -->
   <section class="mb-4">
     <div class="d-flex align-items-center justify-content-between mb-2">
       <h2 class="h5 mb-0">Новинки</h2>
@@ -189,21 +172,4 @@
       {% endfor %}
     </div>
   </section>
-  {% block extra_js %}
-<script src="https://api-maps.yandex.ru/2.1/?apikey=ваш-api-ключ&lang=ru_RU" type="text/javascript"></script>
-<script type="text/javascript">
-    ymaps.ready(init);
-    function init() {
-        var myMap = new ymaps.Map("map", {
-            center: [55.751574, 37.573856], // координаты центра Москвы (замените на свои)
-            zoom: 15,
-            controls: ['zoomControl', 'fullscreenControl']
-        });
-        var myPlacemark = new ymaps.Placemark([55.751574, 37.573856], {
-            balloonContent: 'ToySik LEGO<br>ул. Легостройная, 8'
-        });
-        myMap.geoObjects.add(myPlacemark);
-    }
-</script>
-{% endblock %}
 {% endblock %}
