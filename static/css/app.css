@@ -247,3 +247,31 @@ body {
     background-color: #eef2ff;
     border-color: #cbd5ff;
 }
+/* Стили для контактной информации */
+#contacts .list-unstyled i {
+    width: 1.8rem;
+    font-size: 1.3rem;
+}
+
+#contacts a {
+    text-decoration: none;
+    color: var(--lego-black);
+}
+
+#contacts a:hover {
+    color: var(--lego-red);
+}
+
+/* Блок преимуществ */
+.card i.bi {
+    transition: transform 0.2s;
+}
+
+.card:hover i.bi {
+    transform: scale(1.1);
+}
+
+/* Карта-заглушка */
+.bg-light {
+    background-color: #f0f0f0 !important;
+}

@@ -99,7 +99,15 @@ def cart_detail(request):
         },
     )
 
-
+def feedback(request):
+    if request.method == 'POST':
+        name = request.POST.get('name', '')
+        email = request.POST.get('email', '')
+        message = request.POST.get('message', '')
+        # Здесь можно отправить письмо, но для демо просто покажем сообщение
+        messages.success(request, 'Спасибо! Ваше сообщение отправлено.')
+        return redirect('home')
+    return redirect('home')
 def cart_add(request, product_id: int):
     if request.method != 'POST':
         raise Http404

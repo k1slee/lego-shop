@@ -1,16 +1,18 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}ToySik LEGO — Главная{% endblock %}
 
 {% block content %}
-  <section class="hero rounded-4 p-4 p-md-5 mb-4 text-white">
+  <!-- Hero-секция (оставляем) -->
+  <section class="hero rounded-4 p-4 p-md-5 mb-5 text-white">
     <div class="row align-items-center g-4">
       <div class="col-lg-7">
         <h1 class="display-6 fw-bold mb-3">LEGO для подарков, коллекции и игры</h1>
-        <p class="lead mb-4 opacity-90">Подборки по сериям, новинки и популярные наборы. Быстрая покупка через корзину.</p>
+        <p class="lead mb-4 opacity-90">Официальный магазин конструкторов LEGO. Доставка по всему городу.</p>
         <div class="d-flex flex-wrap gap-2">
           <a class="btn btn-light btn-lg" href="{% url 'catalog' %}">Перейти в каталог</a>
-          <a class="btn btn-outline-light btn-lg" href="{% url 'cart_detail' %}">Открыть корзину</a>
+          <a class="btn btn-outline-light btn-lg" href="#contacts">Контакты</a>
         </div>
       </div>
       <div class="col-lg-5">
@@ -26,31 +28,119 @@
     </div>
   </section>
 
-  <section class="mb-4">
-    <div class="d-flex align-items-center justify-content-between mb-2">
-      <h2 class="h5 mb-0">Категории</h2>
-      <a class="link-secondary" href="{% url 'catalog' %}">Смотреть все</a>
-    </div>
-    <div class="row g-3">
-      {% for cat in categories %}
-        <div class="col-6 col-md-4 col-lg-3">
-          <a class="card category-card h-100 text-decoration-none" href="{% url 'catalog' %}?category={{ cat.slug|urlencode }}">
-            <div class="card-body">
-              <div class="fw-semibold text-dark">{{ cat.name }}</div>
-              {% if cat.description %}
-                <div class="text-muted small mt-1">{{ cat.description|truncatechars:80 }}</div>
-              {% endif %}
-            </div>
-          </a>
+  <!-- ========== О МАГАЗИНЕ ========== -->
+  <section id="about" class="mb-5">
+    <div class="row g-4 align-items-center">
+      <div class="col-md-6">
+        <h2 class="h3 mb-3">Добро пожаловать в ToySik LEGO</h2>
+        <p class="lead">Мы — команда энтузиастов, которые любят конструкторы с детства.</p>
+        <p>Наш магазин открылся в 2020 году, и за это время мы собрали одну из самых больших коллекций LEGO в регионе. У нас вы найдёте как классические наборы (City, Creator, Technic), так и эксклюзивные серии (Star Wars, Harry Potter, Ideas).</p>
+        <p>Мы тщательно проверяем каждого поставщика и гарантируем, что все товары — оригинальные LEGO. Для постоянных покупателей действует накопительная скидка.</p>
+        <div class="mt-3">
+          <i class="bi bi-truck fs-4 me-3 text-primary"></i>
+          <i class="bi bi-gift fs-4 me-3 text-warning"></i>
+          <i class="bi bi-shield-check fs-4 text-success"></i>
         </div>
-      {% empty %}
-        <div class="col">
-          <div class="alert alert-info mb-0">Категории появятся после добавления в админке.</div>
+      </div>
+      <div class="col-md-6">
+        <div class="card border-0 shadow-sm overflow-hidden">
+          <img src="https://via.placeholder.com/600x400?text=LEGO+Store+Photo" class="img-fluid" alt="Наш магазин" style="object-fit: cover; height: 300px; width: 100%;">
+          <div class="card-body bg-light">
+            <p class="card-text text-muted mb-0">Наш уютный магазин в центре города. Всегда свежие новинки и приветливые консультанты.</p>
+          </div>
         </div>
-      {% endfor %}
+      </div>
     </div>
   </section>
 
+  <!-- ========== НАШИ ПРЕИМУЩЕСТВА ========== -->
+  <section class="row g-3 mb-5">
+    <div class="col-md-4">
+      <div class="card h-100 border-0 shadow-sm text-center p-3">
+        <i class="bi bi-award fs-1 text-warning"></i>
+        <h3 class="h5 mt-2">Оригинальная продукция</h3>
+        <p class="text-muted">Только лицензионные наборы LEGO с гарантией.</p>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card h-100 border-0 shadow-sm text-center p-3">
+        <i class="bi bi-truck fs-1 text-primary"></i>
+        <h3 class="h5 mt-2">Быстрая доставка</h3>
+        <p class="text-muted">По городу – за 1-2 дня, по России – от 3 дней.</p>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card h-100 border-0 shadow-sm text-center p-3">
+        <i class="bi bi-chat-dots fs-1 text-success"></i>
+        <h3 class="h5 mt-2">Поддержка 24/7</h3>
+        <p class="text-muted">Ответим на вопросы по телефону или в чате.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== КОНТАКТЫ И КАРТА ========== -->
+  <section id="contacts" class="mb-5">
+    <h2 class="h3 mb-4 text-center">Как нас найти</h2>
+    <div class="row g-4">
+      <div class="col-lg-5">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body p-4">
+            <h3 class="h5 mb-3">Контакты</h3>
+            <ul class="list-unstyled">
+              <li class="mb-3"><i class="bi bi-geo-alt-fill text-danger me-2"></i> <strong>Адрес:</strong> г. Москва, ул. Легостройная, д. 8, ТЦ «Кубик»</li>
+              <li class="mb-3"><i class="bi bi-telephone-fill text-primary me-2"></i> <strong>Телефон:</strong> <a href="tel:+74951234567">+7 (495) 123-45-67</a></li>
+              <li class="mb-3"><i class="bi bi-envelope-fill text-secondary me-2"></i> <strong>Email:</strong> <a href="mailto:info@toysik.ru">info@toysik.ru</a></li>
+              <li class="mb-3"><i class="bi bi-clock-fill text-info me-2"></i> <strong>Режим работы:</strong><br>
+                Пн–Пт: 10:00 – 20:00<br>
+                Сб–Вс: 11:00 – 18:00
+              </li>
+            </ul>
+            <div class="mt-3">
+              <strong>Мы в соцсетях:</strong><br>
+              <a href="#" class="btn btn-outline-primary btn-sm mt-2 me-1"><i class="bi bi-vk"></i> VK</a>
+              <a href="#" class="btn btn-outline-info btn-sm mt-2"><i class="bi bi-telegram"></i> Telegram</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-7">
+        <div class="card border-0 shadow-sm overflow-hidden">
+          <div id="map" style="height: 400px; width: 100%;"></div>
+          <div class="card-footer bg-white small text-muted">
+            <i class="bi bi-pin-map"></i> м. «Лего-Парк», выход №3, далее 300 метров пешком.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== ФОРМА ОБРАТНОЙ СВЯЗИ (опционально) ========== -->
+  <section class="mb-5 bg-light rounded-4 p-4">
+    <div class="row justify-content-center">
+      <div class="col-md-8 text-center">
+        <h2 class="h4 mb-3">Остались вопросы?</h2>
+        <p class="mb-4">Напишите нам, и мы ответим в течение рабочего дня.</p>
+        <form method="post" action="{% url 'feedback' %}" class="row g-3">
+          {% csrf_token %}
+          <div class="col-sm-6">
+            <input type="text" class="form-control" name="name" placeholder="Ваше имя" required>
+          </div>
+          <div class="col-sm-6">
+            <input type="email" class="form-control" name="email" placeholder="Email" required>
+          </div>
+          <div class="col-12">
+            <textarea class="form-control" name="message" rows="3" placeholder="Сообщение" required></textarea>
+          </div>
+          <div class="col-12">
+            <button type="submit" class="btn btn-primary px-4">Отправить</button>
+          </div>
+        </form>
+        <p class="text-muted small mt-3">Мы не передаём ваши данные третьим лицам.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== НОВИНКИ (оставляем как есть) ========== -->
   <section class="mb-4">
     <div class="d-flex align-items-center justify-content-between mb-2">
       <h2 class="h5 mb-0">Новинки</h2>
@@ -83,7 +173,7 @@
               </div>
               <div class="mt-auto d-flex gap-2">
                 <a class="btn btn-outline-primary" href="{{ product.get_absolute_url }}">Подробнее</a>
-                <form method="post" action="{% url 'cart_add' product.id %}">
+                <form method="post" action="{% url 'cart_add' product.id %}" class="cart-form">
                   {% csrf_token %}
                   <input type="hidden" name="quantity" value="1">
                   <button class="btn btn-primary" type="submit" {% if product.stock <= 0 %}disabled{% endif %}>В корзину</button>
@@ -94,36 +184,26 @@
         </div>
       {% empty %}
         <div class="col">
-          <div class="alert alert-info mb-0">Пока нет товаров. Добавьте их через админку или загрузите демо-данные.</div>
+          <div class="alert alert-info mb-0">Пока нет товаров. Добавьте их через админку.</div>
         </div>
       {% endfor %}
     </div>
   </section>
-
-  <section class="row g-3">
-    <div class="col-md-4">
-      <div class="card h-100">
-        <div class="card-body">
-          <div class="fw-semibold mb-1">Честные цены</div>
-          <div class="text-muted">Поддержка старой цены и быстрые скидки.</div>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-4">
-      <div class="card h-100">
-        <div class="card-body">
-          <div class="fw-semibold mb-1">Быстрая корзина</div>
-          <div class="text-muted">Меняйте количество и сразу видите итог.</div>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-4">
-      <div class="card h-100">
-        <div class="card-body">
-          <div class="fw-semibold mb-1">Удобный поиск</div>
-          <div class="text-muted">По названию и краткому описанию.</div>
-        </div>
-      </div>
-    </div>
-  </section>
+  {% block extra_js %}
+<script src="https://api-maps.yandex.ru/2.1/?apikey=ваш-api-ключ&lang=ru_RU" type="text/javascript"></script>
+<script type="text/javascript">
+    ymaps.ready(init);
+    function init() {
+        var myMap = new ymaps.Map("map", {
+            center: [55.751574, 37.573856], // координаты центра Москвы (замените на свои)
+            zoom: 15,
+            controls: ['zoomControl', 'fullscreenControl']
+        });
+        var myPlacemark = new ymaps.Placemark([55.751574, 37.573856], {
+            balloonContent: 'ToySik LEGO<br>ул. Легостройная, 8'
+        });
+        myMap.geoObjects.add(myPlacemark);
+    }
+</script>
+{% endblock %}
 {% endblock %}
