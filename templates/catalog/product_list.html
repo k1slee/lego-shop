@@ -72,7 +72,9 @@
                   <form method="post" action="{% url 'cart_add' product.id %}">
                     {% csrf_token %}
                     <input type="hidden" name="quantity" value="1">
-                    <button class="btn btn-primary" type="submit" {% if product.stock <= 0 %}disabled{% endif %}>В корзину</button>
+                    <button class="btn btn-primary" type="submit" {% if product.stock <= 0 %}disabled{% endif %}>
+                      <i class="bi bi-cart-plus me-1"></i> В корзину
+                    </button>
                   </form>
                 </div>
               </div>

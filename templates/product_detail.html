@@ -44,7 +44,7 @@
           {{ add_form.quantity.label_tag }}
           {{ add_form.quantity }}
         </div>
-        <button class="btn btn-primary" type="submit" {% if product.stock <= 0 %}disabled{% endif %}>Добавить в корзину</button>
+        <button class="btn btn-primary" type="submit" {% if product.stock <= 0 %}disabled{% endif %}><i class="bi bi-cart-check me-2"></i>Добавить в корзину</button>
       </form>
 
       <h2 class="h5">Описание</h2>

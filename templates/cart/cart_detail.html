@@ -39,14 +39,14 @@
                 <form method="post" action="{% url 'cart_update' line.product.id %}" class="d-flex gap-2 justify-content-end">
                   {% csrf_token %}
                   <input class="form-control form-control-sm" type="number" name="quantity" min="0" value="{{ line.quantity }}" style="max-width: 110px;">
-                  <button class="btn btn-outline-primary btn-sm" type="submit">Обновить</button>
+                  <button class="btn btn-outline-primary btn-sm" type="submit"><i class="bi bi-arrow-repeat me-1"></i>Обновить</button>
                 </form>
               </td>
               <td class="text-end">{{ line.total_price }} ₽</td>
               <td class="text-end">
                 <form method="post" action="{% url 'cart_remove' line.product.id %}">
                   {% csrf_token %}
-                  <button class="btn btn-outline-danger btn-sm" type="submit">Удалить</button>
+                  <button class="btn btn-outline-danger btn-sm" type="submit"><i class="bi bi-trash me-1"></i>Удалить</button>
                 </form>
               </td>
             </tr>
@@ -65,7 +65,7 @@
     <div class="d-flex gap-2">
       <form method="post" action="{% url 'cart_clear' %}">
         {% csrf_token %}
-        <button class="btn btn-outline-secondary" type="submit">Очистить корзину</button>
+        <button class="btn btn-outline-secondary" type="submit"><i class="bi bi-basket"></i>Очистить корзину</button>
       </form>
       <a class="btn btn-primary" href="{% url 'checkout' %}">Перейти к оформлению</a>
     </div>
