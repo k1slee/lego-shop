@@ -275,3 +275,52 @@ body {
 .bg-light {
     background-color: #f0f0f0 !important;
 }
+
+/* Fullscreen Hero Section */
+.hero-fullscreen {
+    position: relative;
+    min-height: 100vh; /* на всю высоту экрана */
+    background-image: url('/static/images/hero-bg.jpg'); /* путь к вашему изображению */
+    background-size: cover;
+    background-position: center 30%; /* можно сместить фокус */
+    background-repeat: no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    margin-bottom: 2rem;
+    border-radius: 0; /* убираем скругления, если не нужно */
+}
+
+/* Тёмное затемнение для читаемости текста */
+.hero-fullscreen::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.55); /* регулируйте прозрачность */
+    z-index: 1;
+}
+
+/* Контент поверх затемнения */
+.hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 800px;
+    padding: 2rem;
+    color: white;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+}
+
+/* Адаптив для мобильных */
+@media (max-width: 768px) {
+    .hero-fullscreen {
+        min-height: 80vh;
+        background-position: center 40%;
+    }
+    .hero-content h1 {
+        font-size: 2rem;
+    }
+}
