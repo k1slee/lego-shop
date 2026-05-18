@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ product.name }}{% endblock %}
+
+{% block content %}
+  <nav aria-label="breadcrumb" class="mb-3">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'home' %}">Главная</a></li>
+      <li class="breadcrumb-item"><a href="{% url 'catalog' %}?category={{ product.category.slug|urlencode }}">{{ product.category.name }}</a></li>
+      <li class="breadcrumb-item active" aria-current="page">{{ product.name }}</li>
+    </ol>
+  </nav>
+
+  <div class="row g-4">
+    <div class="col-lg-5">
+      <div class="card">
+        {% if product.image %}
+          <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+        {% else %}
+          <div class="card-body text-muted">Нет изображения</div>
+        {% endif %}
+      </div>
+    </div>
+    <div class="col-lg-7">
+      <h1 class="h3">{{ product.name }}</h1>
+      <div class="mb-3">
+        <span class="fs-4 fw-bold">{{ product.price }} ₽</span>
+        {% if product.old_price %}
+          <span class="text-muted text-decoration-line-through ms-2">{{ product.old_price }} ₽</span>
+        {% endif %}
+      </div>
+      <div class="mb-3">
+        {% if product.stock > 0 %}
+          <span class="badge bg-success">В наличии: {{ product.stock }}</span>
+        {% else %}
+          <span class="badge bg-secondary">Нет в наличии</span>
+        {% endif %}
+      </div>
+      <p class="text-muted">{{ product.short_description }}</p>
+
+      <form method="post" action="{% url 'cart_add' product.id %}" class="d-flex gap-2 align-items-end mb-4">
+        {% csrf_token %}
+        <div>
+          {{ add_form.quantity.label_tag }}
+          {{ add_form.quantity }}
+        </div>
+        <button class="btn btn-primary" type="submit" {% if product.stock <= 0 %}disabled{% endif %}>Добавить в корзину</button>
+      </form>
+
+      <h2 class="h5">Описание</h2>
+      <div class="mb-4">{{ product.description|linebreaks }}</div>
+
+      <h2 class="h5">Характеристики</h2>
+      <ul class="list-group mb-4">
+        <li class="list-group-item d-flex justify-content-between"><span>Артикул</span><span class="fw-semibold">{{ product.sku }}</span></li>
+        {% if product.age_group %}<li class="list-group-item d-flex justify-content-between"><span>Возраст</span><span class="fw-semibold">{{ product.age_group }}</span></li>{% endif %}
+        {% if product.pieces %}<li class="list-group-item d-flex justify-content-between"><span>Деталей</span><span class="fw-semibold">{{ product.pieces }}</span></li>{% endif %}
+        {% if product.series %}<li class="list-group-item d-flex justify-content-between"><span>Серия</span><span class="fw-semibold">{{ product.series }}</span></li>{% endif %}
+      </ul>
+    </div>
+  </div>
+
+  {% if similar_products %}
+    <h2 class="h5 mt-4 mb-3">Похожие товары</h2>
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+      {% for p in similar_products %}
+        <div class="col">
+          <div class="card h-100">
+            {% if p.image %}
+              <img src="{{ p.image.url }}" class="card-img-top" alt="{{ p.name }}">
+            {% endif %}
+            <div class="card-body">
+              <h6 class="card-title mb-1">{{ p.name }}</h6>
+              <div class="text-muted mb-2">{{ p.price }} ₽</div>
+              <a class="btn btn-sm btn-outline-primary" href="{{ p.get_absolute_url }}">Открыть</a>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endblock %}

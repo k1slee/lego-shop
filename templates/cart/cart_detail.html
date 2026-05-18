@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block title %}Корзина{% endblock %}
+
+{% block content %}
+  <div class="d-flex flex-wrap gap-2 align-items-center justify-content-between mb-3">
+    <h1 class="h3 mb-0">Корзина</h1>
+    <a class="btn btn-outline-primary" href="{% url 'catalog' %}">Продолжить покупки</a>
+  </div>
+
+  {% if lines %}
+    <div class="table-responsive">
+      <table class="table align-middle">
+        <thead>
+          <tr>
+            <th>Товар</th>
+            <th class="text-end">Цена</th>
+            <th class="text-end">Количество</th>
+            <th class="text-end">Сумма</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for line in lines %}
+            <tr>
+              <td>
+                <div class="d-flex align-items-center gap-3">
+                  {% if line.product.image %}
+                    <img src="{{ line.product.image.url }}" alt="{{ line.product.name }}" style="width: 64px; height: 64px; object-fit: cover;" class="rounded">
+                  {% endif %}
+                  <div>
+                    <div class="fw-semibold"><a href="{{ line.product.get_absolute_url }}">{{ line.product.name }}</a></div>
+                    <div class="text-muted small">{{ line.product.sku }}</div>
+                  </div>
+                </div>
+              </td>
+              <td class="text-end">{{ line.unit_price }} ₽</td>
+              <td class="text-end" style="width: 240px;">
+                <form method="post" action="{% url 'cart_update' line.product.id %}" class="d-flex gap-2 justify-content-end">
+                  {% csrf_token %}
+                  <input class="form-control form-control-sm" type="number" name="quantity" min="0" value="{{ line.quantity }}" style="max-width: 110px;">
+                  <button class="btn btn-outline-primary btn-sm" type="submit">Обновить</button>
+                </form>
+              </td>
+              <td class="text-end">{{ line.total_price }} ₽</td>
+              <td class="text-end">
+                <form method="post" action="{% url 'cart_remove' line.product.id %}">
+                  {% csrf_token %}
+                  <button class="btn btn-outline-danger btn-sm" type="submit">Удалить</button>
+                </form>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+        <tfoot>
+          <tr>
+            <th colspan="3" class="text-end">Итого</th>
+            <th class="text-end">{{ cart_total }} ₽</th>
+            <th></th>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+
+    <div class="d-flex gap-2">
+      <form method="post" action="{% url 'cart_clear' %}">
+        {% csrf_token %}
+        <button class="btn btn-outline-secondary" type="submit">Очистить корзину</button>
+      </form>
+      <a class="btn btn-primary" href="{% url 'checkout' %}">Перейти к оформлению</a>
+    </div>
+  {% else %}
+    <div class="alert alert-info">Корзина пуста</div>
+  {% endif %}
+{% endblock %}
