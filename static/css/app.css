@@ -417,3 +417,56 @@ body {
 .page-item.disabled .page-link {
     color: #adb5bd;
 }
+/* Hero section */
+.hero-section {
+    position: relative;
+    min-height: 100vh;
+    background-image: url('/static/images/hero-bg.jpg');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.55);
+    z-index: 1;
+}
+.hero-content {
+    position: relative;
+    z-index: 2;
+    color: white;
+    max-width: 800px;
+    padding: 2rem;
+}
+
+/* Карточки товаров */
+.product-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 1rem 2rem rgba(0,0,0,0.1) !important;
+}
+
+/* Коллекции */
+.collection-card {
+    transition: transform 0.2s;
+}
+.collection-card:hover {
+    transform: translateY(-3px);
+    background-color: #b7c53820 !important;
+}
+
+/* Карусель отзывов */
+.carousel-control-prev-icon, .carousel-control-next-icon {
+    background-size: 50%;
+    width: 2.5rem;
+    height: 2.5rem;
+}

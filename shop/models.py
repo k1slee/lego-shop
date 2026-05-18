@@ -47,6 +47,10 @@ class Product(models.Model):
         related_name='products',
         verbose_name='Категория',
     )
+    def get_discount_percent(self):
+        if self.old_price and self.old_price > 0:
+            return int((self.old_price - self.price) / self.old_price * 100)
+        return 0
     sku = models.CharField('Артикул', max_length=64, unique=True)
     slug = models.SlugField('Slug', max_length=280, unique=True, blank=True)
 
@@ -156,3 +160,14 @@ def create_user_profile(sender, instance, created, **kwargs):
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
     instance.profile.save()
+
+class Subscriber(models.Model):
+    email = models.EmailField('Email', unique=True)
+    created_at = models.DateTimeField('Дата подписки', auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'Подписчик'
+        verbose_name_plural = 'Подписчики'
+
+    def __str__(self):
+        return self.email

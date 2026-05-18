@@ -9,7 +9,7 @@ from django.template.loader import render_to_string
 from django.conf import settings
 import requests
 from .forms import ProfileForm, UserEditForm
-from .models import Profile
+from .models import Profile, Subscriber
 from .cart import Cart
 from .forms import AddToCartForm, RegisterForm, UpdateCartForm, OrderForm
 from .models import Category, Product, Order, OrderItem
@@ -22,12 +22,16 @@ def home(request):
         .filter(is_active=True)
         .order_by('-created_at')[:6]
     )
+    popular_products = Product.objects.filter(is_active=True).order_by('-price')[:4]
+    collections = Product.objects.filter(is_active=True, series__isnull=False).exclude(series='').values_list('series', flat=True).distinct()[:6]
     return render(
         request,
         'home.html',
         {
             'categories': categories,
             'featured_products': featured_products,
+            'popular_products': popular_products,
+            'collections': collections,
         },
     )
 
@@ -352,3 +356,16 @@ def order_detail(request, order_id):
     order = get_object_or_404(Order, id=order_id, user=request.user)
     items = order.items.all()
     return render(request, 'cabinet/order_detail.html', {'order': order, 'items': items})
+
+def subscribe(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        if email:
+            obj, created = Subscriber.objects.get_or_create(email=email)
+            if created:
+                messages.success(request, 'Вы успешно подписались на новости!')
+            else:
+                messages.info(request, 'Вы уже подписаны на нашу рассылку.')
+        else:
+            messages.error(request, 'Введите корректный email.')
+    return redirect('home')

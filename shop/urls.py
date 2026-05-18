@@ -23,4 +23,5 @@ urlpatterns = [
     path('profile/edit/', views.profile_edit, name='profile_edit'),
     path('profile/orders/', views.order_history, name='order_history'),
     path('profile/order/<int:order_id>/', views.order_detail, name='order_detail'),
+    path('subscribe/', views.subscribe, name='subscribe'),
 ]

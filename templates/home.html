@@ -4,13 +4,13 @@
 {% block title %}ToySik LEGO — Главная{% endblock %}
 
 {% block content %}
-<!-- Hero-секция на всю ширину -->
-<section style="position: relative; min-height: 100vh; background-image: url('{% static 'images/hero-bg.jpg' %}'); background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; text-align: center;">
-  <div style="position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.55); z-index:1;"></div>
-  <div style="position: relative; z-index:2; color:white; max-width:800px; padding:2rem;">
-    <h1 class="display-4 fw-bold mb-3">LEGO для подарков, коллекции и игры</h1>
-    <p class="lead mb-4">Лучший магазин LEGO. Доставка по всей стране.</p>
-    <div class="d-flex flex-wrap gap-3 justify-content-center">
+<!-- Hero-секция -->
+<section class="hero-section">
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <h1 class="display-4 fw-bold mb-3 animate__animated animate__fadeInUp">LEGO для подарков, коллекции и игры</h1>
+    <p class="lead mb-4 animate__animated animate__fadeInUp animate__delay-1s">Официальный магазин конструкторов. Оригинальные наборы, быстрая доставка.</p>
+    <div class="d-flex flex-wrap gap-3 justify-content-center animate__animated animate__fadeInUp animate__delay-2s">
       <a class="btn btn-light btn-lg" href="{% url 'catalog' %}">Перейти в каталог</a>
       <a class="btn btn-outline-light btn-lg" href="#footer-contacts">Контакты</a>
     </div>
@@ -18,103 +18,234 @@
 </section>
 
 <div class="container">
-  <!-- ========== О МАГАЗИНЕ ========== -->
-  <section id="about" class="mb-5">
-    <div class="row g-4 align-items-center">
-      <div class="col-md-6">
-        <h2 class="h3 mb-3">Добро пожаловать в ToySik LEGO</h2>
+  <!-- Блок "О магазине" (улучшенный) -->
+  <section id="about" class="my-5 py-3">
+    <div class="row g-5 align-items-center">
+      <div class="col-lg-6">
+        <h2 class="display-6 fw-semibold mb-3">Добро пожаловать в <span style="color: #b7c538;">ToySik LEGO</span></h2>
         <p class="lead">Мы — команда энтузиастов, которые любят конструкторы с детства.</p>
-        <p>Наш магазин открылся в 2020 году, и за это время мы собрали одну из самых больших коллекций LEGO в регионе. У нас вы найдёте как классические наборы (City, Creator, Technic), так и эксклюзивные серии (Star Wars, Harry Potter, Ideas).</p>
-        <p>Мы тщательно проверяем каждого поставщика и гарантируем, что все товары — оригинальные LEGO. Для постоянных покупателей действует накопительная скидка.</p>
-        <div class="mt-3">
-          <i class="bi bi-truck fs-4 me-3 text-primary"></i>
-          <i class="bi bi-gift fs-4 me-3 text-warning"></i>
-          <i class="bi bi-shield-check fs-4 text-success"></i>
+        <p>Наш магазин открылся в 2020 году, и за это время мы собрали одну из самых больших коллекций LEGO в регионе. У нас вы найдёте классические наборы (City, Creator, Technic) и эксклюзивные серии (Star Wars, Harry Potter, Ideas).</p>
+        <p>Мы тщательно проверяем каждого поставщика и гарантируем оригинальность продукции. Для постоянных покупателей действует накопительная скидка.</p>
+        <div class="mt-4 d-flex gap-4">
+          <div><i class="bi bi-truck fs-3 text-primary"></i> <span class="fw-semibold">Быстрая доставка</span></div>
+          <div><i class="bi bi-gift fs-3 text-warning"></i> <span class="fw-semibold">Подарочная упаковка</span></div>
+          <div><i class="bi bi-shield-check fs-3 text-success"></i> <span class="fw-semibold">Гарантия качества</span></div>
         </div>
       </div>
-      <div class="col-md-6">
-        <div class="card border-0 shadow-sm overflow-hidden">
-          <img src="https://via.placeholder.com/600x400?text=LEGO+Store" class="img-fluid" alt="Наш магазин" style="object-fit: cover; height: 300px; width: 100%;">
-          <div class="card-body bg-light">
-            <p class="card-text text-muted mb-0">Уютный магазин в центре города. Всегда свежие новинки.</p>
+      <div class="col-lg-6">
+        <div class="card border-0 shadow-lg overflow-hidden rounded-4">
+          <img src="https://images.unsplash.com/photo-1619241638225-14d56e47ae64?w=600&h=400&fit=crop" class="img-fluid" alt="LEGO Store" style="object-fit: cover; height: 350px; width: 100%;">
+          <div class="card-body bg-light text-center">
+            <p class="card-text text-muted mb-0">Наш уютный магазин в центре города. Всегда свежие новинки и приветливые консультанты.</p>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ========== НАШИ ПРЕИМУЩЕСТВА ========== -->
-  <section class="row g-3 mb-5">
+  <!-- Наши преимущества (иконки с подписями) -->
+  <section class="row g-4 my-5 py-3 text-center">
     <div class="col-md-4">
-      <div class="card h-100 border-0 shadow-sm text-center p-3">
-        <i class="bi bi-award fs-1 text-warning"></i>
-        <h3 class="h5 mt-2">Оригинальная продукция</h3>
+      <div class="feature-card p-4 rounded-4 shadow-sm h-100">
+        <div class="feature-icon bg-primary bg-opacity-10 rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+          <i class="bi bi-award fs-1 text-primary"></i>
+        </div>
+        <h4 class="h5">Оригинальная продукция</h4>
         <p class="text-muted">Только лицензионные наборы LEGO с гарантией.</p>
       </div>
     </div>
     <div class="col-md-4">
-      <div class="card h-100 border-0 shadow-sm text-center p-3">
-        <i class="bi bi-truck fs-1 text-primary"></i>
-        <h3 class="h5 mt-2">Быстрая доставка</h3>
-        <p class="text-muted">По городу – за 1-2 дня, по России – от 3 дней.</p>
+      <div class="feature-card p-4 rounded-4 shadow-sm h-100">
+        <div class="feature-icon bg-success bg-opacity-10 rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+          <i class="bi bi-truck fs-1 text-success"></i>
+        </div>
+        <h4 class="h5">Быстрая доставка</h4>
+        <p class="text-muted">По городу – за 1-2 дня, по стране – от 3 дней.</p>
       </div>
     </div>
     <div class="col-md-4">
-      <div class="card h-100 border-0 shadow-sm text-center p-3">
-        <i class="bi bi-chat-dots fs-1 text-success"></i>
-        <h3 class="h5 mt-2">Поддержка 24/7</h3>
+      <div class="feature-card p-4 rounded-4 shadow-sm h-100">
+        <div class="feature-icon bg-warning bg-opacity-10 rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+          <i class="bi bi-chat-dots fs-1 text-warning"></i>
+        </div>
+        <h4 class="h5">Поддержка 24/7</h4>
         <p class="text-muted">Ответим на вопросы по телефону или в чате.</p>
       </div>
     </div>
   </section>
 
-  <!-- ========== НОВИНКИ ========== -->
-  <section class="mb-4">
-    <div class="d-flex align-items-center justify-content-between mb-2">
-      <h2 class="h5 mb-0">Новинки</h2>
-      <a class="link-secondary" href="{% url 'catalog' %}?sort=new">Все новинки</a>
+  <!-- Популярные товары (хиты продаж) -->
+  {% if popular_products %}
+  <section class="my-5 py-3">
+    <div class="d-flex align-items-center justify-content-between mb-4">
+      <h2 class="h2 fw-semibold"><i class="bi bi-fire me-2 text-danger"></i> Хиты продаж</h2>
+      <a class="link-dark" href="{% url 'catalog' %}?sort=popular">Все популярные →</a>
+    </div>
+    <div class="row row-cols-1 row-cols-md-2 row-cols-xl-4 g-4">
+      {% for product in popular_products %}
+        <div class="col">
+          <div class="card product-card h-100 border-0 shadow-sm rounded-4 overflow-hidden">
+            {% if product.image %}
+              <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}" style="height: 180px; object-fit: cover;">
+            {% else %}
+              <div class="bg-light d-flex align-items-center justify-content-center" style="height: 180px;"><i class="bi bi-image text-muted fs-1"></i></div>
+            {% endif %}
+            <div class="card-body p-3">
+              <div class="d-flex justify-content-between align-items-start">
+                <h5 class="card-title fs-6 fw-bold">{{ product.name|truncatechars:45 }}</h5>
+                {% if product.stock > 0 %}
+                  <span class="badge bg-success rounded-pill">В наличии</span>
+                {% else %}
+                  <span class="badge bg-secondary rounded-pill">Нет</span>
+                {% endif %}
+              </div>
+              <div class="mt-2">
+                <span class="fw-bold fs-5 text-primary">{{ product.price }} Br</span>
+                {% if product.old_price %}
+                  <span class="text-muted text-decoration-line-through ms-2">{{ product.old_price }} Br</span>
+                  <span class="badge bg-danger ms-2">-{{ product.get_discount_percent }}%</span>
+                {% endif %}
+              </div>
+              <div class="mt-3 d-flex gap-2">
+                <a href="{{ product.get_absolute_url }}" class="btn btn-outline-primary btn-sm flex-grow-1">Подробнее</a>
+                <form method="post" action="{% url 'cart_add' product.id %}" class="cart-form">
+                  {% csrf_token %}
+                  <input type="hidden" name="quantity" value="1">
+                  <button class="btn btn-primary btn-sm" type="submit" {% if product.stock <= 0 %}disabled{% endif %}>
+                    <i class="bi bi-cart-plus"></i>
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+
+  <!-- Наши коллекции (серии) -->
+  {% if collections %}
+  <section class="my-5 py-3 bg-light rounded-4 p-4">
+    <h2 class="h2 fw-semibold text-center mb-4">Наши коллекции</h2>
+    <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-3 text-center">
+      {% for series in collections %}
+        <div class="col">
+          <a href="{% url 'catalog' %}?series={{ series|urlencode }}" class="text-decoration-none">
+            <div class="collection-card p-3 rounded-3 bg-white shadow-sm h-100">
+              <i class="bi bi-bricks fs-1" style="color: #b7c538;"></i>
+              <p class="mt-2 fw-semibold mb-0">{{ series }}</p>
+            </div>
+          </a>
+        </div>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+
+  <!-- Новинки -->
+  <section class="my-5 py-3">
+    <div class="d-flex align-items-center justify-content-between mb-4">
+      <h2 class="h2 fw-semibold"><i class="bi bi-stars me-2 text-warning"></i> Новинки</h2>
+      <a class="link-dark" href="{% url 'catalog' %}?sort=new">Все новинки →</a>
     </div>
     <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
       {% for product in featured_products %}
         <div class="col">
-          <div class="card product-card h-100">
+          <div class="card product-card h-100 border-0 shadow-sm rounded-4 overflow-hidden">
             {% if product.image %}
-              <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+              <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}" style="height: 200px; object-fit: cover;">
             {% else %}
-              <div class="ratio ratio-4x3 bg-light rounded-top"></div>
+              <div class="bg-light d-flex align-items-center justify-content-center" style="height: 200px;"><i class="bi bi-image text-muted fs-1"></i></div>
             {% endif %}
-            <div class="card-body d-flex flex-column">
-              <div class="d-flex align-items-start justify-content-between gap-2">
-                <h3 class="h6 mb-1">{{ product.name }}</h3>
+            <div class="card-body p-3">
+              <div class="d-flex justify-content-between align-items-start">
+                <h5 class="card-title fs-6 fw-bold">{{ product.name|truncatechars:45 }}</h5>
                 {% if product.stock > 0 %}
-                  <span class="badge text-bg-success">В наличии</span>
+                  <span class="badge bg-success rounded-pill">В наличии</span>
                 {% else %}
-                  <span class="badge text-bg-secondary">Нет</span>
+                  <span class="badge bg-secondary rounded-pill">Нет</span>
                 {% endif %}
               </div>
-              <div class="text-muted small mb-2">{{ product.category.name }}</div>
-              <div class="mb-3">
-                <span class="fw-bold">{{ product.price }} Br</span>
+              <div class="mt-2">
+                <span class="fw-bold fs-5 text-primary">{{ product.price }} Br</span>
                 {% if product.old_price %}
                   <span class="text-muted text-decoration-line-through ms-2">{{ product.old_price }} Br</span>
+                  <span class="badge bg-danger ms-2">-{{ product.get_discount_percent }}%</span>
                 {% endif %}
               </div>
-              <div class="mt-auto d-flex gap-2">
-                <a class="btn btn-outline-primary" href="{{ product.get_absolute_url }}">Подробнее</a>
+              <div class="mt-3 d-flex gap-2">
+                <a href="{{ product.get_absolute_url }}" class="btn btn-outline-primary btn-sm flex-grow-1">Подробнее</a>
                 <form method="post" action="{% url 'cart_add' product.id %}" class="cart-form">
                   {% csrf_token %}
                   <input type="hidden" name="quantity" value="1">
-                  <button class="btn btn-primary" type="submit" {% if product.stock <= 0 %}disabled{% endif %}>В корзину</button>
+                  <button class="btn btn-primary btn-sm" type="submit" {% if product.stock <= 0 %}disabled{% endif %}>
+                    <i class="bi bi-cart-plus"></i>
+                  </button>
                 </form>
               </div>
             </div>
           </div>
         </div>
       {% empty %}
-        <div class="col">
-          <div class="alert alert-info mb-0">Пока нет товаров. Добавьте их через админку.</div>
-        </div>
+        <div class="col-12"><div class="alert alert-info">Пока нет новинок. Добавьте товары через админку.</div></div>
       {% endfor %}
+    </div>
+  </section>
+
+  <!-- Отзывы (статичная карусель, позже можно заменить на модель) -->
+  <section class="my-5 py-3 bg-light rounded-4 p-4">
+    <h2 class="h2 fw-semibold text-center mb-4">Что говорят наши покупатели</h2>
+    <div id="reviewsCarousel" class="carousel slide" data-bs-ride="carousel">
+      <div class="carousel-inner">
+        <div class="carousel-item active">
+          <div class="text-center px-md-5">
+            <i class="bi bi-chat-quote fs-1 text-muted"></i>
+            <p class="lead mt-3">“Отличный магазин! Заказывал набор Technic – пришёл быстро, всё оригинал. Рекомендую!”</p>
+            <p class="fw-semibold">— Алексей, Минск</p>
+          </div>
+        </div>
+        <div class="carousel-item">
+          <div class="text-center px-md-5">
+            <i class="bi bi-chat-quote fs-1 text-muted"></i>
+            <p class="lead mt-3">“Большой выбор, приятные цены. Дочка очень рада новому набору City. Спасибо!”</p>
+            <p class="fw-semibold">— Екатерина, Гомель</p>
+          </div>
+        </div>
+        <div class="carousel-item">
+          <div class="text-center px-md-5">
+            <i class="bi bi-chat-quote fs-1 text-muted"></i>
+            <p class="lead mt-3">“Удобный сайт, быстрая доставка, вежливые консультанты. Буду заказывать ещё!”</p>
+            <p class="fw-semibold">— Дмитрий, Брест</p>
+          </div>
+        </div>
+      </div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#reviewsCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon bg-dark rounded-circle p-2" aria-hidden="true"></span>
+        <span class="visually-hidden">Предыдущий</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#reviewsCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon bg-dark rounded-circle p-2" aria-hidden="true"></span>
+        <span class="visually-hidden">Следующий</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- Подписка на новости -->
+  <section class="my-5 py-4 text-center bg-white rounded-4 shadow-sm">
+    <div class="container">
+      <h2 class="h3 fw-semibold">Будьте в курсе новинок и акций</h2>
+      <p class="text-muted mb-4">Подпишитесь на рассылку и получите скидку 5% на первый заказ</p>
+      <form method="post" action="{% url 'subscribe' %}" class="row g-2 justify-content-center">
+        {% csrf_token %}
+        <div class="col-sm-8 col-md-6">
+          <input type="email" name="email" class="form-control form-control-lg rounded-pill" placeholder="Ваш email" required>
+        </div>
+        <div class="col-auto">
+          <button type="submit" class="btn btn-primary btn-lg rounded-pill px-4">Подписаться</button>
+        </div>
+      </form>
+      <p class="small text-muted mt-3">Мы не спамим и не передаём данные третьим лицам.</p>
     </div>
   </section>
 </div>
