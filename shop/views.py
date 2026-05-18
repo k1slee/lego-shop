@@ -40,7 +40,7 @@ def product_list(request):
     if series:
         products = products.filter(series =series)
 
-        
+
     q = (request.GET.get('q') or '').strip()
     if q:
         products = products.filter(Q(name__icontains=q) | Q(short_description__icontains=q))
@@ -95,14 +95,33 @@ def product_detail(request, slug: str):
 def cart_detail(request):
     cart = Cart(request)
     lines = list(cart.lines())
-    return render(
-        request,
-        'cart/cart_detail.html',
-        {
-            'lines': lines,
-            'cart_total': cart.total_price(),
-        },
-    )
+    
+    # Рекомендуемые товары: из категорий товаров в корзине (до 4 штук)
+    recommended_products = []
+    if lines:
+        # Получаем ID категорий товаров в корзине
+        category_ids = set(line.product.category_id for line in lines)
+        # Ищем активные товары из этих категорий, исключая уже добавленные
+        cart_product_ids = [line.product.id for line in lines]
+        recommended_products = Product.objects.filter(
+            is_active=True,
+            category_id__in=category_ids
+        ).exclude(id__in=cart_product_ids).distinct()[:4]
+    
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        # AJAX-запрос – возвращаем фрагмент таблицы (если нужно)
+        html = render_to_string('cart/cart_table.html', {'lines': lines, 'cart_total': cart.total_price()}, request=request)
+        return JsonResponse({
+            'cart_html': html,
+            'cart_items_count': len(cart),
+            'cart_total_price': str(cart.total_price())
+        })
+    
+    return render(request, 'cart/cart_detail.html', {
+        'lines': lines,
+        'cart_total': cart.total_price(),
+        'recommended_products': recommended_products,
+    })
 
 def feedback(request):
     if request.method == 'POST':

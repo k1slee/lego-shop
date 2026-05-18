@@ -1,104 +1,137 @@
 <!doctype html>
 <html lang="ru">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="icon" type="image/x-icon" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/icons/bricks.svg">
-    <title>{% block title %}ToySik LEGO{% endblock %}</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'css/app.css' %}">
-  </head>
-  <body class="d-flex flex-column min-vh-100">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
-      <div class="container">
-        <a class="navbar-brand fw-semibold" href="{% url 'home' %}">
-          <i class="bi bi-bricks me-1"></i>ToySik LEGO
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain" aria-controls="navbarMain" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarMain">
-          <!-- Поиск -->
-          <form class="d-flex ms-lg-3 me-lg-auto my-2 my-lg-0" method="get" action="{% url 'catalog' %}">
-            <input class="form-control me-2" type="search" name="q" placeholder="Поиск" value="{{ request.GET.q|default:'' }}">
-            <button class="btn btn-outline-light" type="submit">Найти</button>
-          </form>
-
-          <ul class="navbar-nav ms-lg-3">
-            <!-- Выпадающий список "Каталог" с сериями -->
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="catalogDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                Каталог
-              </a>
-              <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="catalogDropdown">
-                <li><a class="dropdown-item" href="{% url 'catalog' %}">Все товары</a></li>
-                <li><hr class="dropdown-divider"></li>
-                {% for series in lego_series %}
-                  <li><a class="dropdown-item" href="{% url 'catalog' %}?series={{ series|urlencode }}">{{ series }}</a></li>
-                {% empty %}
-                  <li><a class="dropdown-item disabled" href="#">Нет серий</a></li>
-                {% endfor %}
-              </ul>
-            </li>
-
-            <li class="nav-item"><a class="nav-link" href="{% url 'home' %}#about">О нас</a></li>
-            <li class="nav-item"><a class="nav-link" href="{% url 'home' %}#contacts">Контакты</a></li>
-
-            <!-- Корзина -->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/icons/bricks.svg">
+  <title>{% block title %}ToySik LEGO{% endblock %}</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'css/app.css' %}">
+</head>
+<body class="d-flex flex-column min-vh-100">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+    <div class="container">
+      <a class="navbar-brand fw-semibold" href="{% url 'home' %}">
+        <i class="bi bi-bricks me-1"></i>ToySik LEGO
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain" aria-controls="navbarMain" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarMain">
+        <form class="d-flex ms-lg-3 me-lg-auto my-2 my-lg-0" method="get" action="{% url 'catalog' %}">
+          <input class="form-control me-2" type="search" name="q" placeholder="Поиск" value="{{ request.GET.q|default:'' }}">
+          <button class="btn btn-outline-light" type="submit">Найти</button>
+        </form>
+        <ul class="navbar-nav ms-lg-3">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="catalogDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Каталог
+            </a>
+            <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="catalogDropdown">
+              <li><a class="dropdown-item" href="{% url 'catalog' %}">Все товары</a></li>
+              <li><hr class="dropdown-divider"></li>
+              {% for series in lego_series %}
+                <li><a class="dropdown-item" href="{% url 'catalog' %}?series={{ series|urlencode }}">{{ series }}</a></li>
+              {% empty %}
+                <li><a class="dropdown-item disabled" href="#">Нет серий</a></li>
+              {% endfor %}
+            </ul>
+          </li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'home' %}#about">О нас</a></li>
+          <li class="nav-item"><a class="nav-link" href="#footer-contacts">Контакты</a></li>
+          <li class="nav-item">
+            <a class="nav-link position-relative" href="{% url 'cart_detail' %}">
+              <i class="bi bi-cart3 me-1"></i>
+              <span class="me-1">Корзина</span>
+              <span class="badge bg-light text-dark rounded-pill">{{ cart_items_count }}</span>
+              <span class="ms-2 text-white-50">{{ cart_total_price }} ₽</span>
+            </a>
+          </li>
+          {% if user.is_authenticated %}
+            <li class="nav-item"><span class="navbar-text text-light me-2">Привет, {{ user.first_name|default:user.username }}</span></li>
             <li class="nav-item">
-              <a class="nav-link position-relative" href="{% url 'cart_detail' %}">
-                <i class="bi bi-cart3 me-1"></i>
-                <span class="me-1">Корзина</span>
-                <span class="badge bg-light text-dark rounded-pill">{{ cart_items_count }}</span>
-                <span class="ms-2 text-white-50">{{ cart_total_price }} ₽</span>
-              </a>
+              <form method="post" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button class="btn btn-outline-light btn-sm mt-1" type="submit">Выйти</button>
+              </form>
             </li>
+          {% else %}
+            <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Вход</a></li>
+            <li class="nav-item"><a class="btn btn-warning btn-sm ms-lg-2 mt-1 fw-semibold" href="{% url 'register' %}">Регистрация</a></li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+  </nav>
 
-            <!-- Авторизация -->
-            {% if user.is_authenticated %}
-              <li class="nav-item"><span class="navbar-text text-light me-2">Привет, {{ user.first_name|default:user.username }}</span></li>
-              <li class="nav-item">
-                <form method="post" action="{% url 'logout' %}">
-                  {% csrf_token %}
-                  <button class="btn btn-outline-light btn-sm mt-1" type="submit">Выйти</button>
-                </form>
-              </li>
-            {% else %}
-              <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Вход</a></li>
-              <li class="nav-item"><a class="btn btn-warning btn-sm ms-lg-2 mt-1 fw-semibold" href="{% url 'register' %}">Регистрация</a></li>
-            {% endif %}
+  <main class="flex-grow-1">
+    {% if messages %}
+      <div class="container mt-3">
+        {% for message in messages %}
+          <div class="alert alert-{{ message.tags }} alert-dismissible fade show mb-3" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Закрыть"></button>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- Футер с контактами и картой -->
+  <footer class="footer bg-dark text-white pt-5 pb-3 mt-auto">
+    <div class="container" id="footer-contacts">
+      <div class="row g-4">
+        <!-- Колонка: О магазине -->
+        <div class="col-md-4">
+          <h5 class="text-uppercase mb-3">ToySik LEGO</h5>
+          <p>Официальный магазин конструкторов LEGO. Оригинальные наборы, быстрая доставка, приятные скидки.</p>
+          <div class="mt-2">
+            <a href="https://instagram.com/toysik_lego" target="_blank" class="text-white me-3"><i class="bi bi-instagram fs-5"></i></a>
+            <a href="https://tiktok.com/@toysik_lego" target="_blank" class="text-white"><i class="bi bi-tiktok fs-5"></i></a>
+          </div>
+        </div>
+        <!-- Колонка: Контакты -->
+        <div class="col-md-4">
+          <h5 class="text-uppercase mb-3">Контакты</h5>
+          <ul class="list-unstyled">
+            <li class="mb-2"><i class="bi bi-geo-alt-fill text-danger me-2"></i> г. Минск, ул. Червякова, 62</li>
+            <li class="mb-2"><i class="bi bi-telephone-fill text-primary me-2"></i> <a href="tel:+375291234567" class="text-white text-decoration-none">+375 (29) 123-45-67</a></li>
+            <li class="mb-2"><i class="bi bi-envelope-fill me-2"></i> <a href="mailto:info@toysik.by" class="text-white text-decoration-none">info@toysik.by</a></li>
+            <li class="mb-2"><i class="bi bi-clock-fill text-info me-2"></i> Пн–Пт: 10–20, Сб–Вс: 11–18</li>
           </ul>
         </div>
-      </div>
-    </nav>
-
-    <main class="flex-grow-1">
-      {% if messages %}
-        <div class="container mt-3">
-          {% for message in messages %}
-            <div class="alert alert-{{ message.tags }} alert-dismissible fade show mb-3" role="alert">
-              {{ message }}
-              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Закрыть"></button>
-            </div>
-          {% endfor %}
+        <!-- Колонка: Карта (мини) -->
+        <div class="col-md-4">
+          <h5 class="text-uppercase mb-3">Как добраться</h5>
+          <div class="rounded overflow-hidden" style="height: 150px;">
+            <iframe 
+              width="100%" 
+              height="150" 
+              frameborder="0" 
+              scrolling="no" 
+              marginheight="0" 
+              marginwidth="0" 
+              src="https://www.openstreetmap.org/export/embed.html?bbox=27.565,53.885,27.595,53.905&layer=mapnik&marker=53.895,27.58" 
+              style="border:0;">
+            </iframe>
+          </div>
+          <p class="small text-muted mt-2">Остановка «Червякова», ТЦ «Кубик»</p>
         </div>
-      {% endif %}
-      {% block content %}{% endblock %}
-    </main>
-
-    <footer class="footer py-4 bg-white mt-auto">
-      <div class="container d-flex flex-wrap gap-2 align-items-center justify-content-between">
-        <div class="text-muted small">ToySik LEGO — демо-магазин на Django</div>
+      </div>
+      <hr class="bg-secondary mt-4">
+      <div class="d-flex flex-wrap justify-content-between align-items-center">
+        <div class="small text-muted">© 2025 ToySik LEGO. Все права защищены.</div>
         <div class="small">
-          <a class="link-secondary text-decoration-none" href="{% url 'catalog' %}">Каталог</a>
-          <span class="text-muted mx-2">·</span>
-          <a class="link-secondary text-decoration-none" href="{% url 'cart_detail' %}">Корзина</a>
+          <a class="text-white text-decoration-none me-3" href="{% url 'catalog' %}">Каталог</a>
+          <a class="text-white text-decoration-none" href="{% url 'cart_detail' %}">Корзина</a>
         </div>
       </div>
-    </footer>
+    </div>
+  </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  </body>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
 </html>

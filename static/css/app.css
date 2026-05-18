@@ -349,3 +349,36 @@ body {
 .dropdown-menu {
     animation: fadeInUp 0.2s ease;
 }
+/* Улучшение для таблицы корзины */
+.table-light th {
+    font-weight: 600;
+    background-color: #f8f9fa;
+}
+.product-card .card-img-top {
+    border-radius: 0.75rem 0.75rem 0 0;
+}
+.btn-outline-secondary:hover i {
+    transform: rotate(15deg);
+}
+
+/* Улучшения для карточки товара */
+.list-group-item {
+    background-color: transparent;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+.card-header {
+    border-bottom: none;
+}
+.product-card .card-img-top {
+    transition: transform 0.3s ease;
+}
+.product-card:hover .card-img-top {
+    transform: scale(1.02);
+}
+.btn-primary {
+    transition: all 0.2s ease;
+}
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
