@@ -35,7 +35,12 @@ def product_list(request):
     category_slug = request.GET.get('category')
     if category_slug:
         products = products.filter(category__slug=category_slug)
+    
+    series = request.GET.get('series')
+    if series:
+        products = products.filter(series =series)
 
+        
     q = (request.GET.get('q') or '').strip()
     if q:
         products = products.filter(Q(name__icontains=q) | Q(short_description__icontains=q))
