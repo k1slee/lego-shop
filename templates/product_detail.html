@@ -41,9 +41,9 @@
       <h1 class="h2 mb-2">{{ product.name }}</h1>
       <div class="mb-3">
         <div class="d-flex align-items-baseline gap-2">
-          <span class="fs-1 fw-bold text-primary">{{ product.price }} ₽</span>
+          <span class="fs-1 fw-bold text-primary">{{ product.price }} Br</span>
           {% if product.old_price %}
-            <span class="text-muted text-decoration-line-through fs-5">{{ product.old_price }} ₽</span>
+            <span class="text-muted text-decoration-line-through fs-5">{{ product.old_price }} Br</span>
             <span class="badge bg-warning text-dark">Скидка</span>
           {% endif %}
         </div>
@@ -141,7 +141,7 @@
               {% endif %}
               <div class="card-body">
                 <h6 class="card-title">{{ p.name|truncatechars:50 }}</h6>
-                <div class="fw-bold text-primary">{{ p.price }} ₽</div>
+                <div class="fw-bold text-primary">{{ p.price }} Br</div>
                 <form method="post" action="{% url 'cart_add' p.id %}" class="cart-form mt-2">
                   {% csrf_token %}
                   <input type="hidden" name="quantity" value="1">
