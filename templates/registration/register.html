@@ -1,42 +1,50 @@
 {% extends 'base.html' %}
+{% load static %}
 
-{% block title %}Регистрация{% endblock %}
+{% block title %}Регистрация — ToySik LEGO{% endblock %}
 
 {% block content %}
-  <div class="row justify-content-center">
-    <div class="col-md-6 col-lg-5">
-      <div class="card border-0 shadow-sm">
-        <div class="card-body p-4">
-          <h1 class="h4 mb-3">Регистрация</h1>
-          <form method="post" class="vstack gap-3">
-            {% csrf_token %}
-            <div>
-              {{ form.first_name.label_tag }}
-              {{ form.first_name }}
-              {% if form.first_name.errors %}<div class="text-danger small mt-1">{{ form.first_name.errors }}</div>{% endif %}
-            </div>
-            <div>
-              {{ form.email.label_tag }}
-              {{ form.email }}
-              {% if form.email.errors %}<div class="text-danger small mt-1">{{ form.email.errors }}</div>{% endif %}
-            </div>
-            <div>
-              {{ form.password1.label_tag }}
-              {{ form.password1 }}
-              {% if form.password1.errors %}<div class="text-danger small mt-1">{{ form.password1.errors }}</div>{% endif %}
-            </div>
-            <div>
-              {{ form.password2.label_tag }}
-              {{ form.password2 }}
-              {% if form.password2.errors %}<div class="text-danger small mt-1">{{ form.password2.errors }}</div>{% endif %}
-            </div>
-            <button class="btn btn-warning btn-lg fw-semibold" type="submit">Создать аккаунт</button>
-            <div class="text-muted small">
-              Уже есть аккаунт? <a href="{% url 'login' %}">Войти</a>
-            </div>
-          </form>
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+  <div class="card border-0 shadow-lg rounded-4" style="max-width: 500px; width: 100%;">
+    <div class="card-header bg-white border-0 text-center pt-4 pb-0">
+      <i class="bi bi-person-plus fs-1" style="color: #b7c538;"></i>
+      <h2 class="h4 mt-2 fw-semibold">Регистрация</h2>
+      <p class="text-muted small">Создайте аккаунт, чтобы покупать быстрее</p>
+    </div>
+    <div class="card-body p-4">
+      <form method="post" class="vstack gap-3">
+        {% csrf_token %}
+        {% if form.non_field_errors %}
+          <div class="alert alert-danger small mb-2">{{ form.non_field_errors }}</div>
+        {% endif %}
+
+        <div>
+          <label for="id_first_name" class="form-label fw-semibold"><i class="bi bi-person me-1"></i> Имя</label>
+          <input type="text" name="first_name" id="id_first_name" class="form-control form-control-lg rounded-pill" value="{{ form.first_name.value|default:'' }}" required>
+          {% if form.first_name.errors %}<div class="text-danger small mt-1">{{ form.first_name.errors }}</div>{% endif %}
         </div>
-      </div>
+        <div>
+          <label for="id_email" class="form-label fw-semibold"><i class="bi bi-envelope me-1"></i> Email</label>
+          <input type="email" name="email" id="id_email" class="form-control form-control-lg rounded-pill" value="{{ form.email.value|default:'' }}" required>
+          {% if form.email.errors %}<div class="text-danger small mt-1">{{ form.email.errors }}</div>{% endif %}
+        </div>
+        <div>
+          <label for="id_password1" class="form-label fw-semibold"><i class="bi bi-lock me-1"></i> Пароль</label>
+          <input type="password" name="password1" id="id_password1" class="form-control form-control-lg rounded-pill" required>
+          {% if form.password1.errors %}<div class="text-danger small mt-1">{{ form.password1.errors }}</div>{% endif %}
+        </div>
+        <div>
+          <label for="id_password2" class="form-label fw-semibold"><i class="bi bi-lock-fill me-1"></i> Подтверждение пароля</label>
+          <input type="password" name="password2" id="id_password2" class="form-control form-control-lg rounded-pill" required>
+          {% if form.password2.errors %}<div class="text-danger small mt-1">{{ form.password2.errors }}</div>{% endif %}
+        </div>
+        <button type="submit" class="btn btn-lg rounded-pill text-white fw-semibold mt-2" style="background-color: #b7c538; border: none;">
+          <i class="bi bi-person-plus me-1"></i> Зарегистрироваться
+        </button>
+        <hr>
+        <p class="text-center small mb-0">Уже есть аккаунт? <a href="{% url 'login' %}" class="fw-semibold text-decoration-none" style="color: #b7c538;">Войти</a></p>
+      </form>
     </div>
   </div>
+</div>
 {% endblock %}

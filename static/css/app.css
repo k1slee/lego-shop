@@ -470,3 +470,22 @@ body {
     width: 2.5rem;
     height: 2.5rem;
 }
+/* Стили для страниц логина/регистрации */
+.form-control-lg {
+    border-radius: 50rem !important;
+    border: 1px solid #dee2e6;
+    transition: all 0.2s;
+}
+.form-control-lg:focus {
+    border-color: #b7c538;
+    box-shadow: 0 0 0 0.2rem rgba(183, 197, 56, 0.25);
+}
+.btn-lg {
+    transition: transform 0.1s;
+}
+.btn-lg:active {
+    transform: scale(0.98);
+}
+.card {
+    border: none;
+}

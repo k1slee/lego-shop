@@ -1,35 +1,47 @@
 {% extends 'base.html' %}
+{% load static %}
 
-{% block title %}Вход{% endblock %}
+{% block title %}Вход — ToySik LEGO{% endblock %}
 
 {% block content %}
-  <div class="row justify-content-center">
-    <div class="col-md-6 col-lg-5">
-      <div class="card border-0 shadow-sm">
-        <div class="card-body p-4">
-          <h1 class="h4 mb-3">Вход</h1>
-          <form method="post" class="vstack gap-3">
-            {% csrf_token %}
-            {% if form.non_field_errors %}
-              <div class="alert alert-danger mb-0">{{ form.non_field_errors }}</div>
-            {% endif %}
-            <div>
-              {{ form.username.label_tag }}
-              {{ form.username }}
-              {% if form.username.errors %}<div class="text-danger small mt-1">{{ form.username.errors }}</div>{% endif %}
-            </div>
-            <div>
-              {{ form.password.label_tag }}
-              {{ form.password }}
-              {% if form.password.errors %}<div class="text-danger small mt-1">{{ form.password.errors }}</div>{% endif %}
-            </div>
-            <button class="btn btn-primary btn-lg" type="submit">Войти</button>
-            <div class="text-muted small">
-              Нет аккаунта? <a href="{% url 'register' %}">Зарегистрируйтесь</a>
-            </div>
-          </form>
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 70vh;">
+  <div class="card border-0 shadow-lg rounded-4" style="max-width: 450px; width: 100%;">
+    <div class="card-header bg-white border-0 text-center pt-4 pb-0">
+      <i class="bi bi-box-arrow-in-right fs-1" style="color: #b7c538;"></i>
+      <h2 class="h4 mt-2 fw-semibold">Вход в аккаунт</h2>
+      <p class="text-muted small">Введите свой email и пароль</p>
+    </div>
+    <div class="card-body p-4">
+      <form method="post" class="vstack gap-3">
+        {% csrf_token %}
+        {% if form.non_field_errors %}
+          <div class="alert alert-danger small mb-2">{{ form.non_field_errors }}</div>
+        {% endif %}
+
+        <div>
+          <label for="id_username" class="form-label fw-semibold"><i class="bi bi-envelope me-1"></i> Email</label>
+          <input type="email" name="username" id="id_username" class="form-control form-control-lg rounded-pill" value="{{ form.username.value|default:'' }}" required autofocus>
+          {% if form.username.errors %}<div class="text-danger small mt-1">{{ form.username.errors }}</div>{% endif %}
         </div>
-      </div>
+        <div>
+          <label for="id_password" class="form-label fw-semibold"><i class="bi bi-lock me-1"></i> Пароль</label>
+          <input type="password" name="password" id="id_password" class="form-control form-control-lg rounded-pill" required>
+          {% if form.password.errors %}<div class="text-danger small mt-1">{{ form.password.errors }}</div>{% endif %}
+        </div>
+        <div class="d-flex justify-content-between align-items-center">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="remember" id="remember">
+            <label class="form-check-label small" for="remember">Запомнить меня</label>
+          </div>
+          <a href="#" class="small text-decoration-none" style="color: #b7c538;">Забыли пароль?</a>
+        </div>
+        <button type="submit" class="btn btn-lg rounded-pill text-white fw-semibold mt-2" style="background-color: #b7c538; border: none;">
+          <i class="bi bi-box-arrow-in-right me-1"></i> Войти
+        </button>
+        <hr>
+        <p class="text-center small mb-0">Нет аккаунта? <a href="{% url 'register' %}" class="fw-semibold text-decoration-none" style="color: #b7c538;">Зарегистрируйтесь</a></p>
+      </form>
     </div>
   </div>
+</div>
 {% endblock %}

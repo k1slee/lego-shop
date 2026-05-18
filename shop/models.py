@@ -24,6 +24,8 @@ class Category(models.Model):
     description = models.TextField('Описание', blank=True)
     sort_order = models.PositiveIntegerField('Порядок сортировки', default=0)
     is_active = models.BooleanField('Активна', default=True)
+    image = models.ImageField('Изображение категории', upload_to='categories/', blank=True, null=True)
+    is_collection = models.BooleanField('Показывать в блоке "Коллекции" на главной', default=False)
 
     class Meta:
         verbose_name = 'Категория'

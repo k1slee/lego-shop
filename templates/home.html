@@ -18,7 +18,7 @@
 </section>
 
 <div class="container">
-  <!-- Блок "О магазине" (улучшенный) -->
+  <!-- Блок "О магазине" -->
   <section id="about" class="my-5 py-3">
     <div class="row g-5 align-items-center">
       <div class="col-lg-6">
@@ -43,7 +43,7 @@
     </div>
   </section>
 
-  <!-- Наши преимущества (иконки с подписями) -->
+  <!-- Наши преимущества -->
   <section class="row g-4 my-5 py-3 text-center">
     <div class="col-md-4">
       <div class="feature-card p-4 rounded-4 shadow-sm h-100">
@@ -73,6 +73,36 @@
       </div>
     </div>
   </section>
+
+  <!-- Наши коллекции (только категории с флагом is_collection) -->
+  {% if collection_categories %}
+  <section class="my-5 py-3">
+    <h2 class="h2 fw-semibold text-center mb-4">Наши коллекции</h2>
+    <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-4">
+      {% for cat in collection_categories %}
+        <div class="col">
+          <a href="{% url 'catalog' %}?category={{ cat.slug|urlencode }}" class="text-decoration-none">
+            <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden category-card">
+              {% if cat.image %}
+                <img src="{{ cat.image.url }}" class="card-img-top" alt="{{ cat.name }}" style="height: 180px; object-fit: cover;">
+              {% else %}
+                <div class="bg-light d-flex align-items-center justify-content-center" style="height: 180px;">
+                  <i class="bi bi-bricks fs-1" style="color: #b7c538;"></i>
+                </div>
+              {% endif %}
+              <div class="card-body text-center">
+                <h5 class="card-title fw-semibold mb-1">{{ cat.name }}</h5>
+                {% if cat.description %}
+                  <p class="card-text text-muted small">{{ cat.description|truncatechars:60 }}</p>
+                {% endif %}
+              </div>
+            </div>
+          </a>
+        </div>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
 
   <!-- Популярные товары (хиты продаж) -->
   {% if popular_products %}
@@ -118,25 +148,6 @@
               </div>
             </div>
           </div>
-        </div>
-      {% endfor %}
-    </div>
-  </section>
-  {% endif %}
-
-  <!-- Наши коллекции (серии) -->
-  {% if collections %}
-  <section class="my-5 py-3 bg-light rounded-4 p-4">
-    <h2 class="h2 fw-semibold text-center mb-4">Наши коллекции</h2>
-    <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-3 text-center">
-      {% for series in collections %}
-        <div class="col">
-          <a href="{% url 'catalog' %}?series={{ series|urlencode }}" class="text-decoration-none">
-            <div class="collection-card p-3 rounded-3 bg-white shadow-sm h-100">
-              <i class="bi bi-bricks fs-1" style="color: #b7c538;"></i>
-              <p class="mt-2 fw-semibold mb-0">{{ series }}</p>
-            </div>
-          </a>
         </div>
       {% endfor %}
     </div>
@@ -193,7 +204,7 @@
     </div>
   </section>
 
-  <!-- Отзывы (статичная карусель, позже можно заменить на модель) -->
+  <!-- Отзывы -->
   <section class="my-5 py-3 bg-light rounded-4 p-4">
     <h2 class="h2 fw-semibold text-center mb-4">Что говорят наши покупатели</h2>
     <div id="reviewsCarousel" class="carousel slide" data-bs-ride="carousel">
