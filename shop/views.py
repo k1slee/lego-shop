@@ -369,3 +369,6 @@ def subscribe(request):
         else:
             messages.error(request, 'Введите корректный email.')
     return redirect('home')
+
+def delivery_payment(request):
+    return render(request, 'delivery_payment.html')

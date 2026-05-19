@@ -41,6 +41,7 @@
               <li><hr class="dropdown-divider"></li>
               <li><a class="dropdown-item" href="{% url 'home' %}#about"><i class="bi bi-building me-2"></i> О нас</a></li>
               <li><a class="dropdown-item" href="#footer-contacts"><i class="bi bi-envelope me-2"></i> Контакты</a></li>
+              <a class="dropdown-item" href="{% url 'delivery_payment' %}">Доставка и оплата</a>
               {% if user.is_authenticated %}
                 <li><hr class="dropdown-divider"></li>
                 <li><a class="dropdown-item" href="{% url 'profile_dashboard' %}"><i class="bi bi-person-circle me-2"></i> Личный кабинет</a></li>

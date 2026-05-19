@@ -28,7 +28,7 @@ class UserEditForm(forms.ModelForm):
 class OrderForm(forms.ModelForm):
     class Meta:
         model = Order
-        fields = ['first_name', 'last_name', 'phone', 'email', 'address', 'comment']
+        fields = ['first_name', 'last_name', 'phone', 'email', 'address', 'delivery_method', 'comment']
         widgets = {
             'first_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Иван'}),
             'last_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Иванов'}),
@@ -36,6 +36,7 @@ class OrderForm(forms.ModelForm):
             'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'ivan@example.com'}),
             'address': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Город, улица, дом, квартира'}),
             'comment': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Пожелания по доставке...'}),
+            'delivery_method': forms.Select(attrs={'class': 'form-control'}),
         }
         
 class LoginForm(AuthenticationForm):

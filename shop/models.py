@@ -101,6 +101,12 @@ class Order(models.Model):
         ('completed', 'Выполнен'),
         ('cancelled', 'Отменён'),
     ]
+    DELIVERY_CHOICES = [
+        ('courier', 'Курьер по Минску (10 Br)'),
+        ('pickup', 'Самовывоз (бесплатно)'),
+        ('post', 'Почта Беларуси (от 5 Br)'),
+        ('europost', 'Европочта (от 7 Br)'),
+    ]
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='Пользователь')
     first_name = models.CharField(max_length=100, verbose_name='Имя')
     last_name = models.CharField(max_length=100, verbose_name='Фамилия', blank=True)
@@ -112,7 +118,7 @@ class Order(models.Model):
     updated_at = models.DateTimeField(auto_now=True, verbose_name='Дата обновления')
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='new', verbose_name='Статус')
     total_price = models.DecimalField(max_digits=12, decimal_places=2, verbose_name='Итого')
-
+    delivery_method = models.CharField('Способ доставки', max_length=20, choices=DELIVERY_CHOICES, default='courier')
     class Meta:
         verbose_name = 'Заказ'
         verbose_name_plural = 'Заказы'
