@@ -25,8 +25,11 @@ SECRET_KEY = 'django-insecure-$s&s757_v**@-$vwr$axbgss03jk)ip#gus6h(8f)q%##vgg@6
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["lego-shop-grpj.onrender.com", "localhost", "127.0.0.1"]
-
+ALLOWED_HOSTS = ['*']
+CSRF_TRUSTED_ORIGINS = [
+    'https://*.pinggy-free.link',
+    'http://*.pinggy-free.link',
+]
 
 # Application definition
 
