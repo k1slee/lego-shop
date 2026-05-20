@@ -41,7 +41,7 @@ body {
     to { transform: rotate(360deg); }
 }
 
-/* ---------- Navbar (тёмный, но с прозрачностью) ---------- */
+/* ---------- Navbar ---------- */
 .navbar {
     background-color: #ffffff;
     backdrop-filter: none;
@@ -106,7 +106,7 @@ body {
     border-color: rgba(255, 255, 255, 0.3);
 }
 
-/* ---------- Карточки категорий и товаров ---------- */
+/* ---------- Карточки категорий и товаров (тень, скругления) ---------- */
 .category-card,
 .product-card {
     transition: var(--transition);
@@ -123,14 +123,25 @@ body {
     box-shadow: var(--box-shadow-hover);
 }
 
-.product-card .card-img-top {
-    height: 210px;
-    object-fit: cover;
-    transition: transform 0.4s ease;
+/* ---------- ИСПРАВЛЕНИЕ ОБРЕЗКИ ИЗОБРАЖЕНИЙ ---------- */
+.product-card .card-img-top,
+.category-card .card-img-top {
+    width: 100% !important;
+    height: auto !important;
+    aspect-ratio: 4 / 3;          /* пропорции контейнера */
+    object-fit: contain !important; /* картинка целиком, без обрезки */
+    background-color: #f8f9fa;    /* фон для прозрачных областей */
+    padding: 0.5rem;
+    transition: transform 0.3s ease;
+    border-radius: 1rem 1rem 0 0;
 }
 
-.product-card:hover .card-img-top {
-    transform: scale(1.02);
+/* Мобильные: квадратные картинки */
+@media (max-width: 768px) {
+    .product-card .card-img-top,
+    .category-card .card-img-top {
+        aspect-ratio: 1 / 1;
+    }
 }
 
 /* Бейджи в стиле LEGO */
@@ -233,9 +244,6 @@ body {
     .hero .display-6 {
         font-size: 1.8rem;
     }
-    .product-card .card-img-top {
-        height: 160px;
-    }
     .navbar-brand {
         font-size: 1.2rem;
     }
@@ -253,6 +261,7 @@ body {
     background-color: #eef2ff;
     border-color: #cbd5ff;
 }
+
 /* Стили для контактной информации */
 #contacts .list-unstyled i {
     width: 1.8rem;
@@ -285,20 +294,19 @@ body {
 /* Fullscreen Hero Section */
 .hero-fullscreen {
     position: relative;
-    min-height: 100vh; /* на всю высоту экрана */
-    background-image: url('/static/images/hero-bg.jpg'); /* путь к вашему изображению */
+    min-height: 100vh;
+    background-image: url('/static/images/hero-bg.jpg');
     background-size: cover;
-    background-position: center 30%; /* можно сместить фокус */
+    background-position: center 30%;
     background-repeat: no-repeat;
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
     margin-bottom: 2rem;
-    border-radius: 0; /* убираем скругления, если не нужно */
+    border-radius: 0;
 }
 
-/* Тёмное затемнение для читаемости текста */
 .hero-fullscreen::before {
     content: "";
     position: absolute;
@@ -306,11 +314,10 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.55); /* регулируйте прозрачность */
+    background: rgba(0, 0, 0, 0.55);
     z-index: 1;
 }
 
-/* Контент поверх затемнения */
 .hero-content {
     position: relative;
     z-index: 2;
@@ -320,7 +327,6 @@ body {
     text-shadow: 0 2px 10px rgba(0,0,0,0.3);
 }
 
-/* Адаптив для мобильных */
 @media (max-width: 768px) {
     .hero-fullscreen {
         min-height: 80vh;
@@ -330,7 +336,6 @@ body {
         font-size: 2rem;
     }
 }
-
 
 /* Выпадающее меню каталога */
 .dropdown-menu-dark {
@@ -351,56 +356,40 @@ body {
     padding-left: 1.5rem;
 }
 
-/* Анимация появления */
 .dropdown-menu {
     animation: fadeInUp 0.2s ease;
 }
+
 /* Улучшение для таблицы корзины */
 .table-light th {
     font-weight: 600;
     background-color: #f8f9fa;
 }
-.product-card .card-img-top {
-    border-radius: 0.75rem 0.75rem 0 0;
-}
+
 .btn-outline-secondary:hover i {
     transform: rotate(15deg);
 }
 
 /* Улучшения для карточки товара */
-.list-group-item {
-    background-color: transparent;
-    border-bottom: 1px solid rgba(0,0,0,0.05);
-}
 .card-header {
     border-bottom: none;
 }
-.product-card .card-img-top {
-    transition: transform 0.3s ease;
-}
+
 .product-card:hover .card-img-top {
     transform: scale(1.02);
 }
-.btn-primary {
-    transition: all 0.2s ease;
-}
+
 .btn-primary:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
-/* Современные карточки каталога */
-.product-card {
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-.product-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 20px 35px -12px rgba(0,0,0,0.1);
-}
+
 /* Бейджи наличия */
 .badge.bg-warning {
     background-color: #ffc107 !important;
     color: #212529;
 }
+
 /* Пагинация */
 .page-link {
     border: none;
@@ -413,85 +402,58 @@ body {
     align-items: center;
     justify-content: center;
 }
+
 .page-link:hover {
     background-color: #e9ecef;
 }
+
 .page-item.active .page-link {
     background-color: #0d6efd;
     color: white;
 }
+
 .page-item.disabled .page-link {
     color: #adb5bd;
-}
-/* Hero section */
-.hero-section {
-    position: relative;
-    min-height: 100vh;
-    background-image: url('/static/images/hero-bg.jpg');
-    background-size: cover;
-    background-position: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-}
-.hero-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.55);
-    z-index: 1;
-}
-.hero-content {
-    position: relative;
-    z-index: 2;
-    color: white;
-    max-width: 800px;
-    padding: 2rem;
-}
-
-/* Карточки товаров */
-.product-card {
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-.product-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 1rem 2rem rgba(0,0,0,0.1) !important;
 }
 
 /* Коллекции */
 .collection-card {
     transition: transform 0.2s;
 }
+
 .collection-card:hover {
     transform: translateY(-3px);
     background-color: #b7c53820 !important;
 }
 
 /* Карусель отзывов */
-.carousel-control-prev-icon, .carousel-control-next-icon {
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
     background-size: 50%;
     width: 2.5rem;
     height: 2.5rem;
 }
+
 /* Стили для страниц логина/регистрации */
 .form-control-lg {
     border-radius: 50rem !important;
     border: 1px solid #dee2e6;
     transition: all 0.2s;
 }
+
 .form-control-lg:focus {
     border-color: #b7c538;
     box-shadow: 0 0 0 0.2rem rgba(183, 197, 56, 0.25);
 }
+
 .btn-lg {
     transition: transform 0.1s;
 }
+
 .btn-lg:active {
     transform: scale(0.98);
 }
+
 .card {
     border: none;
 }
