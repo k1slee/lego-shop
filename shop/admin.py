@@ -46,3 +46,18 @@ class ProductAdmin(admin.ModelAdmin):
         }),
     )
     actions = [make_active, make_inactive]
+
+
+@admin.register(Category)
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ('name', 'image_preview', 'is_active', 'sort_order')
+    list_filter = ('is_active',)
+    search_fields = ('name',)
+    prepopulated_fields = {'slug': ('name',)}
+    fields = ('name', 'slug', 'image', 'description', 'sort_order', 'is_active')
+    
+    def image_preview(self, obj):
+        if obj.image:
+            return mark_safe(f'<img src="{obj.image.url}" style="max-height: 50px; border-radius: 4px;">')
+        return '-'
+    image_preview.short_description = 'Превью'
