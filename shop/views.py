@@ -222,8 +222,7 @@ def checkout(request):
                 OrderItem.objects.create(
                     order=order,
                     product=line.product,
-                    name=line.product.name,       # поле называется name
-                    sku=line.product.sku,         # поле называется sku
+                    name=line.product.name,       # поле называется name        # поле называется sku
                     price=line.unit_price,
                     quantity=line.quantity,
                     total=line.total_price
@@ -268,7 +267,7 @@ def send_telegram_notification(order, lines):
         return
     
     items_text = "\n".join([
-        f"• {line.product.name} (арт. {line.product.sku}) x {line.quantity} = {line.total_price} Br"
+        f"• {line.product.name}  x {line.quantity} = {line.total_price} Br"
         for line in lines
     ])
     text = f"""

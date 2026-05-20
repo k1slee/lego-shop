@@ -49,16 +49,11 @@ class Product(models.Model):
         related_name='products',
         verbose_name='Категория',
     )
-    def get_discount_percent(self):
-        if self.old_price and self.old_price > 0:
-            return int((self.old_price - self.price) / self.old_price * 100)
-        return 0
-    sku = models.CharField('Артикул', max_length=64, unique=True)
     slug = models.SlugField('Slug', max_length=280, unique=True, blank=True)
 
     price = models.DecimalField('Цена', max_digits=12, decimal_places=2)
     old_price = models.DecimalField('Старая цена', max_digits=12, decimal_places=2, blank=True, null=True)
-    in_stock = models.PositiveIntegerField('В наличии', default=True)
+    in_stock = models.BooleanField('В наличии', default=True)   # исправлено на BooleanField
 
     short_description = models.TextField('Краткое описание')
     description = models.TextField('Полное описание')
@@ -79,12 +74,16 @@ class Product(models.Model):
         indexes = [
             models.Index(fields=['is_active', 'created_at']),
             models.Index(fields=['category', 'is_active']),
-            models.Index(fields=['sku']),
             models.Index(fields=['slug']),
         ]
 
-    def __str__(self) -> str:
-        return f'{self.name} ({self.sku})'
+    def __str__(self):
+        return f'{self.name}'
+
+    def get_discount_percent(self):
+        if self.old_price and self.old_price > 0:
+            return int((self.old_price - self.price) / self.old_price * 100)
+        return 0
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -92,6 +91,7 @@ class Product(models.Model):
         super().save(*args, **kwargs)
 
     def get_absolute_url(self):
+        from django.urls import reverse
         return reverse('product_detail', kwargs={'slug': self.slug})
 
 class Order(models.Model):
@@ -132,7 +132,6 @@ class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='items', verbose_name='Заказ')
     product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True, verbose_name='Товар')
     name = models.CharField(max_length=255, verbose_name='Название товара')  # копия на момент заказа
-    sku = models.CharField(max_length=64, verbose_name='Артикул')
     price = models.DecimalField(max_digits=12, decimal_places=2, verbose_name='Цена')
     quantity = models.PositiveIntegerField(default=1, verbose_name='Количество')
     total = models.DecimalField(max_digits=12, decimal_places=2, verbose_name='Сумма')
