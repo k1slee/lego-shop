@@ -43,9 +43,10 @@ body {
 
 /* ---------- Navbar (тёмный, но с прозрачностью) ---------- */
 .navbar {
-    background-color: rgba(33, 31, 31, 0.95);
-    backdrop-filter: blur(8px);
-    box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+    background-color: #ffffff;
+    backdrop-filter: none;
+    box-shadow: none;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
     transition: var(--transition);
 }
 
@@ -55,8 +56,8 @@ body {
 }
 
 .navbar-brand:hover i {
-    transform: rotate(15deg);
-    color: var(--lego-yellow);
+    transform: none;
+    color: inherit;
 }
 
 .navbar .badge {
@@ -218,8 +219,13 @@ body {
 /* ---------- Футер ---------- */
 .footer {
     background: #ffffff;
-    border-top: 3px solid var(--lego-yellow);
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
     margin-top: 3rem;
+}
+
+.footer-sep {
+    border-color: rgba(0, 0, 0, 0.08);
+    opacity: 1;
 }
 
 /* ---------- Адаптивность ---------- */

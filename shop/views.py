@@ -1,6 +1,4 @@
 from django.contrib import messages
-from django.contrib.auth import login
-from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.http import Http404, JsonResponse
@@ -8,10 +6,9 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.template.loader import render_to_string
 from django.conf import settings
 import requests
-from .forms import ProfileForm, UserEditForm
-from .models import Profile, Subscriber
+from .models import Subscriber
 from .cart import Cart
-from .forms import AddToCartForm, RegisterForm, UpdateCartForm, OrderForm
+from .forms import AddToCartForm, UpdateCartForm, OrderForm
 from .models import Category, Product, Order, OrderItem
 
 
@@ -199,30 +196,11 @@ def cart_clear(request):
     return redirect('cart_detail')
 
 
-def register(request):
-    if request.user.is_authenticated:
-        return redirect('catalog')
-
-    if request.method == 'POST':
-        form = RegisterForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            login(request, user)
-            messages.success(request, 'Регистрация выполнена')
-            return redirect('catalog')
-        messages.error(request, 'Исправьте ошибки в форме')
-    else:
-        form = RegisterForm()
-
-    return render(request, 'registration/register.html', {'form': form})
-
-
 def order_success(request, order_id):
     order = get_object_or_404(Order, id=order_id)
     return render(request, 'order_success.html', {'order': order})
 
 
-@login_required
 def checkout(request):
     cart = Cart(request)
     lines = list(cart.lines())
@@ -235,7 +213,7 @@ def checkout(request):
         form = OrderForm(request.POST)
         if form.is_valid():
             order = form.save(commit=False)
-            order.user = request.user
+            order.user = request.user if request.user.is_authenticated else None
             order.total_price = cart.total_price()
             order.save()
             
@@ -312,50 +290,6 @@ def send_telegram_notification(order, lines):
         requests.post(url, data={'chat_id': chat_id, 'text': text, 'parse_mode': 'HTML'}, timeout=5)
     except Exception:
         pass
-
-@login_required
-def profile_dashboard(request):
-    user = request.user
-    profile, created = Profile.objects.get_or_create(user=user)
-    orders = Order.objects.filter(user=user).order_by('-created_at')
-    return render(request, 'cabinet/dashboard.html', {
-        'user': user,
-        'profile': profile,
-        'orders': orders,
-    })
-
-@login_required
-def profile_edit(request):
-    user = request.user
-    profile = user.profile
-    if request.method == 'POST':
-        user_form = UserEditForm(request.POST, instance=user)
-        profile_form = ProfileForm(request.POST, request.FILES, instance=profile)
-        if user_form.is_valid() and profile_form.is_valid():
-            user_form.save()
-            profile_form.save()
-            messages.success(request, 'Данные профиля обновлены')
-            return redirect('profile_dashboard')
-        else:
-            messages.error(request, 'Исправьте ошибки в форме')
-    else:
-        user_form = UserEditForm(instance=user)
-        profile_form = ProfileForm(instance=profile)
-    return render(request, 'cabinet/edit_profile.html', {
-        'user_form': user_form,
-        'profile_form': profile_form,
-    })
-
-@login_required
-def order_history(request):
-    orders = Order.objects.filter(user=request.user).order_by('-created_at')
-    return render(request, 'cabinet/order_history.html', {'orders': orders})
-
-@login_required
-def order_detail(request, order_id):
-    order = get_object_or_404(Order, id=order_id, user=request.user)
-    items = order.items.all()
-    return render(request, 'cabinet/order_detail.html', {'order': order, 'items': items})
 
 def subscribe(request):
     if request.method == 'POST':

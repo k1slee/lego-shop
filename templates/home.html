@@ -1,15 +1,15 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}ToySik LEGO — Главная{% endblock %}
+{% block title %}ToySik — Главная{% endblock %}
 
 {% block content %}
 <!-- Hero-секция -->
 <section class="hero-section">
   <div class="hero-overlay"></div>
   <div class="hero-content">
-    <h1 class="display-4 fw-bold mb-3 animate__animated animate__fadeInUp">LEGO для подарков, коллекции и игры</h1>
-    <p class="lead mb-4 animate__animated animate__fadeInUp animate__delay-1s">Официальный магазин конструкторов. Оригинальные наборы, быстрая доставка.</p>
+    <h1 class="display-4 fw-bold mb-3 animate__animated animate__fadeInUp">Конструкторы для подарков, коллекции и игры</h1>
+    <p class="lead mb-4 animate__animated animate__fadeInUp animate__delay-1s">Качественные аналоги и совместимые наборы. Быстрая доставка и приятные цены.</p>
     <div class="d-flex flex-wrap gap-3 justify-content-center animate__animated animate__fadeInUp animate__delay-2s">
       <a class="btn btn-light btn-lg" href="{% url 'catalog' %}">Перейти в каталог</a>
       <a class="btn btn-outline-light btn-lg" href="#footer-contacts">Контакты</a>
@@ -22,10 +22,10 @@
   <section id="about" class="my-5 py-3">
     <div class="row g-5 align-items-center">
       <div class="col-lg-6">
-        <h2 class="display-6 fw-semibold mb-3">Добро пожаловать в <span style="color: #b7c538;">ToySik LEGO</span></h2>
+        <h2 class="display-6 fw-semibold mb-3">Добро пожаловать в <span style="color: #b7c538;">ToySik</span></h2>
         <p class="lead">Мы — команда энтузиастов, которые любят конструкторы с детства.</p>
-        <p>Наш магазин открылся в 2020 году, и за это время мы собрали одну из самых больших коллекций LEGO в регионе. У нас вы найдёте классические наборы (City, Creator, Technic) и эксклюзивные серии (Star Wars, Harry Potter, Ideas).</p>
-        <p>Мы тщательно проверяем каждого поставщика и гарантируем качество продукции. Для постоянных покупателей действует накопительная скидка.</p>
+        <p>Наш магазин открылся в 2020 году, и за это время мы собрали большой ассортимент качественных аналогов и совместимых наборов.</p>
+        <p>Мы тщательно проверяем поставщиков и следим за качеством: детали хорошо стыкуются, пластик прочный, а комплектация соответствует описанию. Для постоянных покупателей действует накопительная скидка.</p>
         <div class="mt-4 d-flex gap-4">
           <div><i class="bi bi-truck fs-3 text-primary"></i> <span class="fw-semibold">Быстрая доставка</span></div>
           <div><i class="bi bi-gift fs-3 text-warning"></i> <span class="fw-semibold">Подарочная упаковка</span></div>
@@ -34,7 +34,7 @@
       </div>
       <div class="col-lg-6">
         <div class="card border-0 shadow-lg overflow-hidden rounded-4">
-          <img src="https://images.unsplash.com/photo-1619241638225-14d56e47ae64?w=600&h=400&fit=crop" class="img-fluid" alt="LEGO Store" style="object-fit: cover; height: 350px; width: 100%;">
+          <img src="https://images.unsplash.com/photo-1619241638225-14d56e47ae64?w=600&h=400&fit=crop" class="img-fluid" alt="Магазин конструкторов" style="object-fit: cover; height: 350px; width: 100%;">
           <div class="card-body bg-light text-center">
             <p class="card-text text-muted mb-0">Наш уютный магазин в центре города. Всегда свежие новинки и приветливые консультанты.</p>
           </div>
@@ -212,7 +212,7 @@
         <div class="carousel-item active">
           <div class="text-center px-md-5">
             <i class="bi bi-chat-quote fs-1 text-muted"></i>
-            <p class="lead mt-3">“Отличный магазин! Заказывал набор Technic – пришёл быстро, всё оригинал. Рекомендую!”</p>
+            <p class="lead mt-3">“Отличный магазин! Заказывал большой набор — пришёл быстро, качество деталей отличное. Рекомендую!”</p>
             <p class="fw-semibold">— Алексей, Минск</p>
           </div>
         </div>
@@ -242,7 +242,7 @@
     </div>
   </section>
 
-  <!-- Подписка на новости -->
+  <!-- Подписка на новости 
   <section class="my-5 py-4 text-center bg-white rounded-4 shadow-sm">
     <div class="container">
       <h2 class="h3 fw-semibold">Будьте в курсе новинок и акций</h2>
@@ -258,6 +258,6 @@
       </form>
       <p class="small text-muted mt-3">Мы не спамим и не передаём данные третьим лицам.</p>
     </div>
-  </section>
+  </section>-->
 </div>
 {% endblock %}
