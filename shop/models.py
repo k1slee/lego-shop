@@ -58,7 +58,7 @@ class Product(models.Model):
 
     price = models.DecimalField('Цена', max_digits=12, decimal_places=2)
     old_price = models.DecimalField('Старая цена', max_digits=12, decimal_places=2, blank=True, null=True)
-    stock = models.PositiveIntegerField('Количество на складе', default=0)
+    in_stock = models.PositiveIntegerField('В наличии', default=True)
 
     short_description = models.TextField('Краткое описание')
     description = models.TextField('Полное описание')

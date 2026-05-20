@@ -26,8 +26,6 @@
           </div>
         {% endif %}
       </div>
-      <!-- Миниатюры для галереи (если добавите несколько изображений) – пока заглушка -->
-      <!-- <div class="d-flex gap-2 mt-3">...</div> -->
     </div>
 
     <!-- Правая колонка: информация -->
@@ -47,7 +45,7 @@
             <span class="badge bg-warning text-dark">Скидка</span>
           {% endif %}
         </div>
-        <div class="mb-3">
+        <div class="mt-2">
           {% if product.stock > 10 %}
             <span class="badge bg-success px-3 py-2 rounded-pill">
               <i class="bi bi-check-circle me-1"></i> В наличии: {{ product.stock }} шт.
@@ -61,7 +59,7 @@
               <i class="bi bi-x-circle me-1"></i> Нет в наличии
             </span>
           {% endif %}
-        </div>>
+        </div>
       </div>
 
       <div class="mb-4">
@@ -86,20 +84,10 @@
         </div>
       </div>
 
-      <!-- Характеристики -->
+      <!-- Характеристики (без артикула и возраста) -->
       <div class="mb-4">
         <h3 class="h5 mb-3">Характеристики</h3>
         <ul class="list-group list-group-flush">
-          <li class="list-group-item d-flex justify-content-between align-items-center px-0">
-            <span>Артикул</span>
-            <span class="fw-semibold">{{ product.sku }}</span>
-          </li>
-          {% if product.age_group %}
-          <li class="list-group-item d-flex justify-content-between align-items-center px-0">
-            <span>Возраст</span>
-            <span class="fw-semibold">{{ product.age_group }}</span>
-          </li>
-          {% endif %}
           {% if product.pieces %}
           <li class="list-group-item d-flex justify-content-between align-items-center px-0">
             <span>Количество деталей</span>
