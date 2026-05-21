@@ -305,3 +305,12 @@ def subscribe(request):
 
 def delivery_payment(request):
     return render(request, 'delivery_payment.html')
+
+def seller_info(request):
+    return render (request, 'legal/seller_info.html')
+
+def public_offer(request):
+    return render (request, 'legal/public_offer.html')
+
+def privacy_policy(request):
+    return render(request, 'legal/privacy_policy.html')
