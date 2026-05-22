@@ -40,8 +40,8 @@ class Cart:
             new_quantity = int(self._cart[product_id]['quantity']) + quantity
 
         new_quantity = max(1, new_quantity)
-        if new_quantity > product.stock:
-            raise ValueError('Недостаточно товара на складе')
+        if new_quantity > product.in_stock:
+            raise ValueError('Товар отсутствует на складе')
 
         self._cart[product_id]['quantity'] = new_quantity
         self._cart[product_id]['price'] = str(product.price)
